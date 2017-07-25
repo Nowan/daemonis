@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Daemonis</title>
+  
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+  
+    <script src="lib/phaser.min.js"></script>
+  
+    <script src="src/states/Boot.js"></script>
+    <script src="src/states/Preloader.js"></script>
+    <script src="src/states/Game.js"></script>
+    
+    <script>
+      function initGame() {
+        var game = new Phaser.Game(1500, 1000, Phaser.CANVAS, 'phaser-canvas', null, true);
+        game.state.add('Boot', boot_state);
+        game.state.add('Preloader', load_state);
+        game.state.add('Game', game_state);
+        
+        game.state.start('Boot');
+      }
+    </script>
+  
+  </head>
+  
+  <body onload="initGame()">
+  
+    <div id="phaser-canvas"></div>
+    
+  </body>
+</html>
