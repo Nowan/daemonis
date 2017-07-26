@@ -1,5 +1,7 @@
 var game_state = function() {
 
+  var game_controller;
+
   return {
   
     create() {
@@ -41,8 +43,8 @@ var game_state = function() {
       this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, 
                                                Phaser.Keyboard.UP, Phaser.Keyboard.DOWN ]);
       
-      // start the game
-      var game_controller = new GameController( this.game, current_preview, next_preview,
+      // initialize game controller and start a new game
+      game_controller = new GameController( this.game, current_preview, next_preview,
                                                 score_indicator, speed_indicator, game_area );
       game_controller.startGame();
     },
@@ -64,6 +66,9 @@ var game_state = function() {
       if (this.key_down.isDown){
         console.log("down");
       } 
+      
+      
+      game_controller.dropCage();
     },
 
     render() {
