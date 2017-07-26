@@ -26,6 +26,9 @@ var game_state = function() {
       var speed_indicator = new ParamIndicator(this.game, indicators_width, "interface/lbl_speed", "1.0x");
       speed_indicator.x = game_container.x - indicators_width;
       speed_indicator.y = content_center.y + 30;
+      
+      var game_area = new GameArea(this.game);
+      game_container.setContent(game_area);
     },
 
     update() {
