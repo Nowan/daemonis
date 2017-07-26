@@ -1,10 +1,11 @@
 var game_state = function() {
+  
+  var current_tetrodata, next_tetrodata;
 
-  function getRandomTetromino(game){
-    // tetrobase - all valid tetrominoes from 'data/tetrominoes.json'
-    var tetrobase = game.cache.getJSON('tetrominoes');
+  function getRandomTetroData(game){
+    var tetrobase = game.cache.getJSON('tetrominoes'); // list of tetrominoes from 'data/tetrominoes.json'
     const random_index = Math.floor(Math.random() * tetrobase.length);
-    
+    return tetrobase[random_index];
   }
 
   return {
@@ -37,7 +38,8 @@ var game_state = function() {
       var game_area = new GameArea(this.game);
       game_container.setContent(game_area);
       
-      getRandomTetromino(this.game);
+      current_tetrodata = getRandomTetroData(this.game);
+      next_tetrodata = getRandomTetroData(this.game);
     },
 
     update() {
