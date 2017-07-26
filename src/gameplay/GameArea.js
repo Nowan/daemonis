@@ -35,3 +35,9 @@ function GameArea(game){
 
 GameArea.prototype = Object.create(Phaser.Group.prototype);
 GameArea.prototype.constructor = GameArea;
+
+GameArea.prototype.spawnTetromino = function(game, tetrodata, spawn_column){
+  var tetromino = new Tetromino(game, tetrodata);
+  this.add(tetromino);
+  return tetromino;
+}
