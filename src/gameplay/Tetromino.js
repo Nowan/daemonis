@@ -27,6 +27,7 @@ function Tetromino(game, tetromino_data){
         var cage = new Cage(game);
         cage.x = c * tile_size;
         cage.y = r * tile_size;
+        this.add(cage);
       }
     }
   }

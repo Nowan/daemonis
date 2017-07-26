@@ -16,16 +16,21 @@ var game_state = function() {
       const indicators_width = 380;
       const content_center = { x: this.game.width * 0.5, y: this.game.height * 0.5 };
       
+      current_tetrodata = getRandomTetroData(this.game);
+      next_tetrodata = getRandomTetroData(this.game);
+      
       var game_container = new GameContainer(this.game);
       game_container.x = content_center.x - game_container.width * 0.5;
       
       var current_preview = new TetroPreview(this.game, "interface/lbl_current");
       current_preview.x = game_container.x + game_container.width + previews_margin_left;
       current_preview.y = previews_margin_top;
+      current_preview.setPreview(this.game, current_tetrodata);
       
       var next_preview = new TetroPreview(this.game, "interface/lbl_next");
       next_preview.x = game_container.x + game_container.width + previews_margin_left;
       next_preview.y = current_preview.y + current_preview.height + previews_margin_top;
+      next_preview.setPreview(this.game, next_tetrodata);
       
       var score_indicator = new ParamIndicator(this.game, indicators_width, "interface/lbl_score", 0);
       score_indicator.x = game_container.x - indicators_width;
@@ -38,8 +43,7 @@ var game_state = function() {
       var game_area = new GameArea(this.game);
       game_container.setContent(game_area);
       
-      current_tetrodata = getRandomTetroData(this.game);
-      next_tetrodata = getRandomTetroData(this.game);
+      
     },
 
     update() {
