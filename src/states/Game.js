@@ -1,5 +1,12 @@
 var game_state = function() {
 
+  function getRandomTetromino(game){
+    // tetrobase - all valid tetrominoes from 'data/tetrominoes.json'
+    var tetrobase = game.cache.getJSON('tetrominoes');
+    const random_index = Math.floor(Math.random() * tetrobase.length);
+    
+  }
+
   return {
   
     create() {
@@ -29,6 +36,8 @@ var game_state = function() {
       
       var game_area = new GameArea(this.game);
       game_container.setContent(game_area);
+      
+      getRandomTetromino(this.game);
     },
 
     update() {

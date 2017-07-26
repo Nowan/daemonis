@@ -6,6 +6,8 @@ var load_state = function() {
       // load game assets
       this.game.load.atlasJSONArray( 'basesheet', 'assets/spritesheets/basesheet.png',
                                      'assets/spritesheets/basesheet.json' );
+      
+      this.game.load.json('tetrominoes', 'data/tetrominoes.json');
     },
     
     create() {
