@@ -1,0 +1,124 @@
+{"frames": [
+
+{
+	"filename": "game/cage",
+	"frame": {"x":334,"y":748,"w":40,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":40},
+	"sourceSize": {"w":40,"h":40}
+},
+{
+	"filename": "game/chain",
+	"frame": {"x":362,"y":1,"w":8,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":8,"h":16},
+	"sourceSize": {"w":8,"h":16}
+},
+{
+	"filename": "game/prisoner/000",
+	"frame": {"x":345,"y":722,"w":17,"h":21},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":11,"w":17,"h":21},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "game/prisoner/001",
+	"frame": {"x":359,"y":535,"w":17,"h":22},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":10,"w":17,"h":22},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "game/prisoner/002",
+	"frame": {"x":345,"y":699,"w":18,"h":21},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":11,"w":18,"h":21},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "game/prisoner/003",
+	"frame": {"x":338,"y":535,"w":19,"h":22},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":10,"w":19,"h":22},
+	"sourceSize": {"w":32,"h":32}
+},
+{
+	"filename": "interface/border_light",
+	"frame": {"x":338,"y":1,"w":22,"h":532},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":22,"h":532},
+	"sourceSize": {"w":22,"h":532}
+},
+{
+	"filename": "interface/border_segment",
+	"frame": {"x":352,"y":622,"w":20,"h":75},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":20,"h":75},
+	"sourceSize": {"w":20,"h":75}
+},
+{
+	"filename": "interface/game_bg",
+	"frame": {"x":1,"y":1,"w":335,"h":561},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":335,"h":561},
+	"sourceSize": {"w":335,"h":561}
+},
+{
+	"filename": "interface/lbl_current",
+	"frame": {"x":256,"y":564,"w":112,"h":56},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":112,"h":56},
+	"sourceSize": {"w":112,"h":56}
+},
+{
+	"filename": "interface/lbl_next",
+	"frame": {"x":256,"y":748,"w":76,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":76,"h":54},
+	"sourceSize": {"w":76,"h":54}
+},
+{
+	"filename": "interface/lbl_score",
+	"frame": {"x":256,"y":685,"w":87,"h":61},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":61},
+	"sourceSize": {"w":87,"h":61}
+},
+{
+	"filename": "interface/lbl_speed",
+	"frame": {"x":256,"y":622,"w":94,"h":61},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":94,"h":61},
+	"sourceSize": {"w":94,"h":61}
+},
+{
+	"filename": "interface/square_border",
+	"frame": {"x":1,"y":564,"w":253,"h":244},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":253,"h":244},
+	"sourceSize": {"w":253,"h":244}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "basesheet.png",
+	"format": "RGBA8888",
+	"size": {"w":377,"h":809},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b1738342e7351aeef9595758ed78053e:c1a3a65185e60bf6577078137b8dc409:0b89948ee54ccdad845c325ebc3db573$"
+}
+}
