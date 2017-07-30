@@ -22,48 +22,9 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   
   // private methods
   function _getRandomTetrodata(){
-    var tetrobase = game.cache.getJSON('tetrominoes'); // list of tetrominoes from 'data/tetrominoes.json'
+    var tetrobase = game.cache.getJSON('tetrominoes'); // list of templates from 'data/tetrominoes.json'
     const random_index = Math.floor(Math.random() * tetrobase.length);
-    return tetrobase[random_index];
-  }
-  
-  function _rotateTetrodata(tetrodata, direction){
-    const tetrowidth = tetrodata.shape[0].length;
-    const tetroheight = tetrodata.shape.length;
-    const n = Math.max(tetrowidth, tetroheight);
-    
-    // init square matrix with original shape data and zeros on overflowing positions
-    const orig_matrix = [];
-    for( var r = 0; r < n; r++ ){
-      orig_matrix[r] = [];
-      for( var c = 0; c < n; c++ )
-        orig_matrix[r][c] = (r < tetroheight && c < tetrowidth) ? tetrodata.shape[r][c] : 0;
-    }
-    
-    // init square matrix with rotated shape data
-    var rot_matrix = [];
-    for( var r = 0; r < n; r++ ){
-      rot_matrix[r] = [];
-      for( var c = 0; c < n; c++ )
-        rot_matrix[r][c] = direction > 0 ? orig_matrix[n - c - 1][r] : orig_matrix[c][n - r - 1];
-    }
-    
-    // clean rotated matrix from empty rows and columns
-    for( var r = n - 1; r >= 0; r-- ){
-      var is_row_empty = true;
-      for( var c = 0; c < n; c++ )
-        if( rot_matrix[r][c] == 1 ){ is_row_empty = false; break; }
-      if(is_row_empty) rot_matrix.splice(r, 1);
-    }
-    
-    for( var c = n - 1; c >= 0; c-- ){
-      var is_col_empty = true;
-      for( var r = 0; r < rot_matrix.length; r++ )
-        if( rot_matrix[r][c] == 1 ){ is_col_empty = false; break; }
-      if(is_col_empty) for( var r = 0; r < rot_matrix.length; r++ ) rot_matrix[r].splice(c, 1);
-    }
-    
-    tetrodata.shape = rot_matrix;
+    return Tetrodata(tetrobase[random_index]);
   }
   
   function _initFulfillmentMap(){
@@ -76,17 +37,14 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   function _canMoveTo(tetrodata, target_row, target_col){
-    const tetrowidth = tetrodata.shape[0].length;
-    const tetroheight = tetrodata.shape.length;
-    
     // I check: if target position is inside game grid bounds
-    if( target_row < 0 || target_row + tetroheight > GameConfig.grid_size[1] ||
-        target_col < 0 || target_col + tetrowidth > GameConfig.grid_size[0] )
+    if( target_row < 0 || target_row + tetrodata.getHeight() > GameConfig.grid_size[1] ||
+        target_col < 0 || target_col + tetrodata.getWidth() > GameConfig.grid_size[0] )
       return false;
     
     // II check: check that tetromino does not collide with static objects on game grid
-    for( var r = 0; r < tetroheight; r++ ){
-      for( var c = 0; c < tetrowidth; c++ ){
+    for( var r = 0; r < tetrodata.getHeight(); r++ ){
+      for( var c = 0; c < tetrodata.getWidth(); c++ ){
         if(tetrodata.shape[r][c] == 1 && _fulfillment_map[target_row + r][target_col + c])
           return false;
       }
@@ -98,13 +56,12 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   function _updateTetroqueue(){
     _tetroqueue[0] = _tetroqueue[1];
     _tetroqueue[1] = _getRandomTetrodata();
-    // 
     current_preview.setPreview(game, _tetroqueue[0]);
     next_preview.setPreview(game, _tetroqueue[1]);
   }
   
   function _spawnTetromino(tetrodata){
-    _active_tetrodata = tetrodata
+    _active_tetrodata = tetrodata;
     _active_position.row = 0;
     _active_position.col = 0;
     game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
@@ -129,12 +86,9 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
     }
     else{
-      const tetrowidth = _active_tetrodata.shape[0].length;
-      const tetroheight = _active_tetrodata.shape.length;
-      
       // set flags of _fulfillment_map from active tetromino shape
-      for( var r = 0; r < tetroheight; r++ )
-        for( var c = 0; c < tetrowidth; c++ )
+      for( var r = 0; r < _active_tetrodata.getHeight(); r++ )
+        for( var c = 0; c < _active_tetrodata.getWidth(); c++ )
           if(_active_tetrodata.shape[r][c] == 1)
             _fulfillment_map[_active_position.row + r][_active_position.col + c] = true;
       
@@ -164,7 +118,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.rotateCage = function(direction){
     if(game.time.now < _last_rotation_time + GameConfig.rotation_delay) return;
     
-    _rotateTetrodata(_active_tetrodata, direction);
+    _active_tetrodata.rotate(direction);
     game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
     
     _last_rotation_time = game.time.now;

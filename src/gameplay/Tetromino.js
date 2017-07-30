@@ -12,17 +12,18 @@
   
 */
 
-function Tetromino(game, tetromino_data){
+function Tetromino(game, tetrodata){
 	Phaser.Group.call(this, game);
   
-  this.data = tetromino_data;
-  this.tiled_width = this.data.shape[0].length;
-  this.tiled_height = this.data.shape.length;
+  this.data = new Tetrodata(tetrodata);
+  
+  this.getWidth = tetrodata.getWidth;
+  this.getHeight = tetrodata.getHeight;
   
   const tile_size = game.height / GameConfig.grid_size[1];
   
-  for( var r = 0; r < this.tiled_height; r++ ){
-    for( var c = 0; c < this.tiled_width; c++ ){
+  for( var r = 0; r < this.getHeight(); r++ ){
+    for( var c = 0; c < this.getWidth(); c++ ){
       if( this.data.shape[r][c] == 1 ){
         var cage = new Cage(game);
         cage.x = c * tile_size;

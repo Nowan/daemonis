@@ -40,7 +40,8 @@ GameArea.prototype = Object.create(Phaser.Group.prototype);
 GameArea.prototype.constructor = GameArea;
 
 GameArea.prototype.updateActiveTetromino = function(game, position, tetrodata){
-  if(!this.active_tetromino || this.active_tetromino.data != tetrodata){
+  // initialize / reinitialize tetromino object only if neccessary 
+  if(!this.active_tetromino || !tetrodata.equals(this.active_tetromino.data)){
     if(this.active_tetromino) this.active_tetromino.destroy();
     this.active_tetromino = new Tetromino(game, tetrodata);
     this.add(this.active_tetromino);
