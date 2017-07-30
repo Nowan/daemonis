@@ -54,11 +54,11 @@ var game_state = function() {
     
       // handle keys
       if (this.key_left.isDown){
-        console.log("left");
+        game_controller.moveCage(-1);
       } 
     
       if (this.key_right.isDown){
-        console.log("right");
+        game_controller.moveCage(1);
       }
       
       if (this.key_up.isDown){
