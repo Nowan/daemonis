@@ -29,17 +29,17 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   
   function _initFulfillmentMap(){
     _fulfillment_map = [];
-    for( var r = 0; r < GameConfig.grid_size[1]; r++ ){
+    for( var r = 0; r < GameConfig.grid.height; r++ ){
       _fulfillment_map[r] = [];
-      for( var c = 0; c < GameConfig.grid_size[0]; c++ )
+      for( var c = 0; c < GameConfig.grid.width; c++ )
         _fulfillment_map[r][c] = false;
     }
   }
   
   function _canMoveTo(tetrodata, target_row, target_col){
     // I check: if target position is inside game grid bounds
-    if( target_row < 0 || target_row + tetrodata.getHeight() > GameConfig.grid_size[1] ||
-        target_col < 0 || target_col + tetrodata.getWidth() > GameConfig.grid_size[0] )
+    if( target_row < 0 || target_row + tetrodata.getHeight() > GameConfig.grid.height ||
+        target_col < 0 || target_col + tetrodata.getWidth() > GameConfig.grid.width )
       return false;
     
     // II check: check that tetromino does not collide with static objects on game grid
@@ -121,13 +121,13 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     var tmp_tetrodata = new Tetrodata(_active_tetrodata);
     tmp_tetrodata.rotate(direction);
     
-    // automatically fix tetromino position if its part is outside grid bounds
+    // automatically fix tetromino position if it is partly outside grid bounds
     var tmp_position = { 
-      row: Math.min(_active_position.row, GameConfig.grid_size[1] - tmp_tetrodata.getHeight()),
-      col: Math.min(_active_position.col, GameConfig.grid_size[0] - tmp_tetrodata.getWidth())
+      row: Math.min(_active_position.row, GameConfig.grid.height - tmp_tetrodata.getHeight()),
+      col: Math.min(_active_position.col, GameConfig.grid.width - tmp_tetrodata.getWidth())
     };
 
-    // apply changes if tetromino does not overlap static objects
+    // apply changes if rotated tetromino does not overlap static objects
     if(_canMoveTo(tmp_tetrodata, tmp_position.row, tmp_position.col)){
       _active_tetrodata = tmp_tetrodata;
       _active_position = tmp_position;

@@ -20,14 +20,12 @@ function Tetromino(game, tetrodata){
   this.getWidth = tetrodata.getWidth;
   this.getHeight = tetrodata.getHeight;
   
-  const tile_size = game.height / GameConfig.grid_size[1];
-  
   for( var r = 0; r < this.getHeight(); r++ ){
     for( var c = 0; c < this.getWidth(); c++ ){
       if( this.data.shape[r][c] == 1 ){
         var cage = new Cage(game);
-        cage.x = c * tile_size;
-        cage.y = r * tile_size;
+        cage.x = c * GameConfig.tile_size;
+        cage.y = r * GameConfig.tile_size;
         this.add(cage);
       }
     }

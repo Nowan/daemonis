@@ -19,6 +19,8 @@ var boot_state = function() {
       
       this.game.stage.disableVisibilityChange = true;
       
+      GameConfig.tile_size = this.game.height / GameConfig.grid.height;
+      
       this.game.state.start('Preloader');
     }
   };

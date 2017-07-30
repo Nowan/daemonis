@@ -1,9 +1,8 @@
 function GameArea(game){
 	Phaser.Group.call(this, game);
   
-  const tile_size = game.height / GameConfig.grid_size[1];
-  const container_width = GameConfig.grid_size[0] * tile_size;
-  const container_height = GameConfig.grid_size[1] * tile_size;
+  const container_width = GameConfig.grid.width * GameConfig.tile_size;
+  const container_height = GameConfig.grid.height * GameConfig.tile_size;
   
   function initGrid(){
     // draw grid on Phaser.Graphics object
@@ -12,15 +11,15 @@ function GameArea(game){
     graphics.beginFill(0x000000, 1);
     
     // vertical lines
-    for( var i = 1; i < GameConfig.grid_size[0]; i++ ){
-      var line_x = i * tile_size;
+    for( var i = 1; i < GameConfig.grid.width; i++ ){
+      var line_x = i * GameConfig.tile_size;
       graphics.moveTo(line_x, 0);
       graphics.lineTo(line_x, container_height);
     }
     
     // horizontal lines
-    for( var i = 1; i < GameConfig.grid_size[1]; i++ ){
-      var line_y = i * tile_size;
+    for( var i = 1; i < GameConfig.grid.height; i++ ){
+      var line_y = i * GameConfig.tile_size;
       graphics.moveTo(0, line_y);
       graphics.lineTo(container_width, line_y);
     }
@@ -47,22 +46,20 @@ GameArea.prototype.updateActiveTetromino = function(game, position, tetrodata){
     this.add(this.active_tetromino);
   }
   
-  const tile_size = game.height / GameConfig.grid_size[1];
-  this.active_tetromino.x = position.col * tile_size;
-  this.active_tetromino.y = position.row * tile_size;
+  this.active_tetromino.x = position.col * GameConfig.tile_size;
+  this.active_tetromino.y = position.row * GameConfig.tile_size;
 }
 
 GameArea.prototype.updateStaticObjects = function(game, fulfillment_map){
   this.objects_group.removeAll();
-  const tile_size = game.height / GameConfig.grid_size[1];
   
-  for( var r = 0; r < GameConfig.grid_size[1]; r++ ){
-    for( var c = 0; c < GameConfig.grid_size[0]; c++ ){
+  for( var r = 0; r < GameConfig.grid.height; r++ ){
+    for( var c = 0; c < GameConfig.grid.width; c++ ){
       if(!fulfillment_map[r][c]) continue;
       
       var cage = new Cage(game);
-      cage.x = c * tile_size;
-      cage.y = r * tile_size;
+      cage.x = c * GameConfig.tile_size;
+      cage.y = r * GameConfig.tile_size;
       this.objects_group.add(cage);
     }
   }

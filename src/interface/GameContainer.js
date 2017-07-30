@@ -7,9 +7,8 @@
 function GameContainer( game ){
   Phaser.Group.call(this, game);
   
-  const tile_size = game.height / GameConfig.grid_size[1];
-  const container_width = GameConfig.grid_size[0] * tile_size;
-  const container_height = GameConfig.grid_size[1] * tile_size;
+  const container_width = GameConfig.grid.width * GameConfig.tile_size;
+  const container_height = GameConfig.grid.height * GameConfig.tile_size;
   
   function initBorders() {
     const border_width = 20;
