@@ -50,8 +50,11 @@ var game_state = function() {
     },
 
     update() {
+      var is_game_finished = game_controller.tryToFinish();
+      if(is_game_finished) return;
+      
       var apply_acceleration = false;
-    
+      
       // handle keys
       if (this.key_left.isDown){
         game_controller.moveCage(-1);

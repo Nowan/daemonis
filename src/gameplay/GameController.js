@@ -5,6 +5,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.dropCage = function(apply_acceleration){};
   this.moveCage = function(direction){}; // 1 - right, -1 - left; 
   this.rotateCage = function(direction){}; // 1 - clockwise, -1 - counter-clockwise
+  this.tryToFinish = function(){ return false; };
   
   // additional callbacks
   this.onTetrominoFit = function(position, tetrodata){};
@@ -135,6 +136,24 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
       _last_rotation_time = game.time.now;
     }
+  }
+  
+  this.tryToFinish = function(){
+    if(game.time.now < _last_move_time + GameConfig.move_delay) return false;
+    
+    var is_game_finished = false;
+    for( var c = 0; c < GameConfig.grid.width; c++ ){
+      if(_fulfillment_map[0][c]){
+        is_game_finished = true;
+        break;
+      }
+    }
+    
+    if(is_game_finished){
+      
+    }
+    
+    return is_game_finished;
   }
   
   _initFulfillmentMap();
