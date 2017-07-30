@@ -38,26 +38,26 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
   }
   
-  function _checkFit(){
-    const tetrowidth = _active_tetrodata.shape[0].length;
-    const tetroheight = _active_tetrodata.shape.length;
+  function _canMoveTo(tetrodata, target_row, target_col){
+    const tetrowidth = tetrodata.shape[0].length;
+    const tetroheight = tetrodata.shape.length;
     
-    // grid check: fit if tetromino's lowest segment is on, or under, grid last row
-    if(_active_position.row + tetroheight >= GameConfig.grid_size[1]) return true;
+    // I check: if target position is inside game grid bounds
+    if( target_row < 0 || target_row + tetroheight > GameConfig.grid_size[1] ||
+        target_col < 0 || target_col + tetrowidth > GameConfig.grid_size[0] )
+      return false;
     
-    // shape check: fit if slot under tetromino is full
-    let shape_fit = false;
-    for( var c = 0; c < tetrowidth; c++ ){
-      if(_active_tetrodata.shape[tetroheight - 1][c] == 0) continue;
-      if(_fulfillment_map[_active_position.row + tetroheight][_active_position.col + c]){
-        shape_fit = true;
-        break;
+    // II check: check that tetromino does not collide with static objects on game grid
+    for( var r = 0; r < tetroheight; r++ ){
+      for( var c = 0; c < tetrowidth; c++ ){
+        if(tetrodata.shape[r][c] == 1 && _fulfillment_map[target_row + r][target_col + c])
+          return false;
       }
     }
     
-    return shape_fit;
+    return true;
   }
-  
+
   function _updateTetroqueue(){
     _tetroqueue[0] = _tetroqueue[1];
     _tetroqueue[1] = _getRandomTetrodata();
@@ -85,9 +85,13 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     let time_step = apply_acceleration ? GameConfig.accelerated_drop_time : GameConfig.regular_drop_time;
     if(game.time.now < _last_drop_time + time_step) return;
     
-    const is_fitting = _checkFit();
+    const is_falling = _canMoveTo(_active_tetrodata, _active_position.row + 1, _active_position.col);
     
-    if(is_fitting){
+    if(is_falling){
+      _active_position.row += 1;
+      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    }
+    else{
       const tetrowidth = _active_tetrodata.shape[0].length;
       const tetroheight = _active_tetrodata.shape.length;
       
@@ -101,10 +105,6 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       _updateTetroqueue();
       _spawnTetromino(_tetroqueue[0]);
     }
-    else{
-      _active_position.row += 1;
-      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
-    }
     
     _last_drop_time = game.time.now;
   }
@@ -114,12 +114,12 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     direction = Math.sign(direction);
     const next_col = _active_position.col + direction;
-    const tetrowidth = _active_tetrodata.shape[0].length;
+    const is_direction_free = _canMoveTo(_active_tetrodata, _active_position.row, next_col);
     
-    if(next_col < 0 || next_col + tetrowidth > GameConfig.grid_size[0]) return;
-    
-    _active_position.col = next_col;
-    game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    if(is_direction_free){
+      _active_position.col = next_col;
+      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    }
     
     _last_move_time = game.time.now;
   }
