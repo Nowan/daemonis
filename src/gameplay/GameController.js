@@ -2,7 +2,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
 
   // public methods
   this.startGame = function(){};
-  this.dropCage = function(){};
+  this.dropCage = function(apply_acceleration){};
   
   // additional callbacks
   this.onTetrominoFit = function(position, tetrodata){};
@@ -14,7 +14,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   let _active_position = { row: 0, col: 0 }; // position where active tetromino is located
   let _fulfillment_map = []; // boolean matrix of a size of game grid. Provides info about tetrominoes that have   
                              // fallen already. If element at [row, col] is true - slot is full, false - empty. 
-  let _drop_time = 0; // helper variable to fire tetromino drop in proper time
+  let _last_drop_time = game.time.now; // helper variable to fire tetromino drop in proper time
   
   // private methods
   function _getRandomTetrodata(){
@@ -79,8 +79,9 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     _spawnTetromino(_tetroqueue[0]);
   }
   
-  this.dropCage = function(){
-    if(game.time.now < _drop_time) return;
+  this.dropCage = function( apply_acceleration ){
+    let time_step = apply_acceleration ? GameConfig.accelerated_drop_time : GameConfig.regular_drop_time;
+    if(game.time.now < _last_drop_time + time_step) return;
     
     const is_fitting = _checkFit();
     
@@ -103,7 +104,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
     }
     
-    _drop_time = game.time.now + GameConfig.regular_drop_time;
+    _last_drop_time = game.time.now;
   }
   
   _initFulfillmentMap();

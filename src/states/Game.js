@@ -50,6 +50,8 @@ var game_state = function() {
     },
 
     update() {
+      var apply_acceleration = false;
+    
       // handle keys
       if (this.key_left.isDown){
         console.log("left");
@@ -64,11 +66,11 @@ var game_state = function() {
       } 
       
       if (this.key_down.isDown){
-        console.log("down");
+        apply_acceleration = true;
       } 
       
       
-      game_controller.dropCage();
+      game_controller.dropCage(apply_acceleration);
     },
 
     render() {

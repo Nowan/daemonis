@@ -6,6 +6,6 @@ var GameConfig = {
   grid_size: [ 10, 20 ],
   
   regular_drop_time: 1000, // time that tetromino stays on a single grid row
-  accelerated_drop_time: 500 // time that tetromino stays on a single grid row with "down" key pressed
+  accelerated_drop_time: 150 // time that tetromino stays on a single grid row with "down" key pressed
   
 }
