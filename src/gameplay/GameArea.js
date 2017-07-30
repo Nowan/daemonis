@@ -31,6 +31,9 @@ function GameArea(game){
   
   var grid = initGrid();
   this.add(grid);
+  
+  this.objects_group = game.add.group();
+  this.add(this.objects_group);
 };
 
 GameArea.prototype = Object.create(Phaser.Group.prototype);
@@ -49,5 +52,17 @@ GameArea.prototype.updateActiveTetromino = function(game, position, tetrodata){
 }
 
 GameArea.prototype.updateStaticObjects = function(game, fulfillment_map){
+  this.objects_group.removeAll();
+  const tile_size = game.height / GameConfig.grid_size[1];
   
+  for( var r = 0; r < GameConfig.grid_size[1]; r++ ){
+    for( var c = 0; c < GameConfig.grid_size[0]; c++ ){
+      if(!fulfillment_map[r][c]) continue;
+      
+      var cage = new Cage(game);
+      cage.x = c * tile_size;
+      cage.y = r * tile_size;
+      this.objects_group.add(cage);
+    }
+  }
 }
