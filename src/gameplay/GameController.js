@@ -118,10 +118,23 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.rotateCage = function(direction){
     if(game.time.now < _last_rotation_time + GameConfig.rotation_delay) return;
     
-    _active_tetrodata.rotate(direction);
-    game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    var tmp_tetrodata = new Tetrodata(_active_tetrodata);
+    tmp_tetrodata.rotate(direction);
     
-    _last_rotation_time = game.time.now;
+    // automatically fix tetromino position if its part is outside grid bounds
+    var tmp_position = { 
+      row: Math.min(_active_position.row, GameConfig.grid_size[1] - tmp_tetrodata.getHeight()),
+      col: Math.min(_active_position.col, GameConfig.grid_size[0] - tmp_tetrodata.getWidth())
+    };
+
+    // apply changes if tetromino does not overlap static objects
+    if(_canMoveTo(tmp_tetrodata, tmp_position.row, tmp_position.col)){
+      _active_tetrodata = tmp_tetrodata;
+      _active_position = tmp_position;
+    
+      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+      _last_rotation_time = game.time.now;
+    }
   }
   
   _initFulfillmentMap();
