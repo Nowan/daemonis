@@ -36,8 +36,18 @@ function GameArea(game){
 GameArea.prototype = Object.create(Phaser.Group.prototype);
 GameArea.prototype.constructor = GameArea;
 
-GameArea.prototype.spawnTetromino = function(game, tetrodata, spawn_column){
-  var tetromino = new Tetromino(game, tetrodata);
-  this.add(tetromino);
-  return tetromino;
+GameArea.prototype.updateActiveTetromino = function(game, position, tetrodata){
+  if(!this.active_tetromino || this.active_tetromino.data != tetrodata){
+    if(this.active_tetromino) this.active_tetromino.destroy();
+    this.active_tetromino = new Tetromino(game, tetrodata);
+    this.add(this.active_tetromino);
+  }
+  
+  const tile_size = game.height / GameConfig.grid_size[1];
+  this.active_tetromino.x = position.col * tile_size;
+  this.active_tetromino.y = position.row * tile_size;
+}
+
+GameArea.prototype.updateStaticObjects = function(game, fulfillment_map){
+  
 }

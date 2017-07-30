@@ -4,9 +4,14 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.startGame = function(){};
   this.dropCage = function(){};
   
+  // additional callbacks
+  this.onTetrominoFit = function(position, tetrodata){};
+  this.onRowFull = function(row_index){};
+  
   // private variables
   let _tetroqueue = []; // queue of tetrominoes. Element at 0 is current tetrominoe, 1 - next, ...
-  let _active_tetromino;
+  let _active_tetrodata; // data of active tetromino (as in "data/tetrominoes.json")
+  let _active_position = { row: 0, col: 0 }; // position where active tetromino is located
   let _drop_time = 0; // helper variable to fire tetromino drop in proper time
   
   // private methods
@@ -16,8 +21,15 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     return tetrobase[random_index];
   }
   
+  function _rotateTetrodata(tetrodata, direction){
+    // TODO: rotate tetrodata matrix in clockwise / couter-clockwise directions
+  }
+  
   function _spawnTetromino(tetrodata){
-    _active_tetromino = game_area.spawnTetromino(game, tetrodata);
+    _active_tetrodata = tetrodata;
+    _active_position.row = 0;
+    _active_position.col = 0;
+    game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
   }
   
   // public methods initialization
@@ -31,8 +43,17 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.dropCage = function(){
     if(game.time.now < _drop_time) return;
     
-    const tile_size = game.height / GameConfig.grid_size[1];
-    _active_tetromino.y += tile_size;
+    const tetrowidth = _active_tetrodata.shape[0].length;
+    const tetroheight = _active_tetrodata.shape.length;
+    
+    if(_active_position.row + tetroheight < GameConfig.grid_size[1]){
+      _active_position.row += 1;
+      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    }
+    else{
+      // TODO: add tetromino to static objects
+    }
+    
     _drop_time = game.time.now + GameConfig.regular_drop_time;
   }
 }

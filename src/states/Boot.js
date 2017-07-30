@@ -17,6 +17,8 @@ var boot_state = function() {
       this.game.scale.parentIsWindow = false;
       this.game.scale.pageAlignHorizontally = true;
       
+      this.game.stage.disableVisibilityChange = true;
+      
       this.game.state.start('Preloader');
     }
   };
