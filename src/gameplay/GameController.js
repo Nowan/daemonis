@@ -36,6 +36,26 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
   }
   
+  function _checkFit(){
+    const tetrowidth = _active_tetrodata.shape[0].length;
+    const tetroheight = _active_tetrodata.shape.length;
+    
+    // grid check: fit if tetromino's lowest segment is on, or under, grid last row
+    if(_active_position.row + tetroheight >= GameConfig.grid_size[1]) return true;
+    
+    // shape check: fit if slot under tetromino is full
+    let shape_fit = false;
+    for( var c = 0; c < tetrowidth; c++ ){
+      if(_active_tetrodata.shape[tetroheight - 1][c] == 0) continue;
+      if(_fulfillment_map[_active_position.row + tetroheight][_active_position.col + c]){
+        shape_fit = true;
+        break;
+      }
+    }
+    
+    return shape_fit;
+  }
+  
   function _updateTetroqueue(){
     _tetroqueue[0] = _tetroqueue[1];
     _tetroqueue[1] = _getRandomTetrodata();
@@ -49,7 +69,6 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     _active_position.row = 0;
     _active_position.col = 0;
     game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
-    console.log(_active_tetrodata);
   }
   
   // public methods initialization
@@ -63,15 +82,13 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.dropCage = function(){
     if(game.time.now < _drop_time) return;
     
-    const tetrowidth = _active_tetrodata.shape[0].length;
-    const tetroheight = _active_tetrodata.shape.length;
+    const is_fitting = _checkFit();
     
-    if(_active_position.row + tetroheight < GameConfig.grid_size[1]){
-      _active_position.row += 1;
-      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
-    }
-    else{
-      // update flags of _fulfillment_map with active tetromino
+    if(is_fitting){
+      const tetrowidth = _active_tetrodata.shape[0].length;
+      const tetroheight = _active_tetrodata.shape.length;
+      
+      // set flags of _fulfillment_map from active tetromino shape
       for( var r = 0; r < tetroheight; r++ )
         for( var c = 0; c < tetrowidth; c++ )
           if(_active_tetrodata.shape[r][c] == 1)
@@ -80,6 +97,10 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       game_area.updateStaticObjects(game, _fulfillment_map);
       _updateTetroqueue();
       _spawnTetromino(_tetroqueue[0]);
+    }
+    else{
+      _active_position.row += 1;
+      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
     }
     
     _drop_time = game.time.now + GameConfig.regular_drop_time;
