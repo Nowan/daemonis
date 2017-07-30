@@ -3,7 +3,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   // public methods
   this.startGame = function(){};
   this.dropCage = function(apply_acceleration){};
-  this.moveCage = function(direction){}; // -1 - left; 1 - right
+  this.moveCage = function(direction){}; // 1 - right, -1 - left; 
+  this.rotateCage = function(direction){}; // 1 - clockwise, -1 - counter-clockwise
   
   // additional callbacks
   this.onTetrominoFit = function(position, tetrodata){};
@@ -17,6 +18,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
                              // fallen already. If element at [row, col] is true - slot is full, false - empty. 
   let _last_drop_time = game.time.now; // helper variable to fire tetromino drop in proper time
   let _last_move_time = game.time.now; // helper variable to move tetromino with proper delay
+  let _last_rotation_time = game.time.now; // helper variable to rotate tetromino with proper delay
   
   // private methods
   function _getRandomTetrodata(){
@@ -26,7 +28,42 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   function _rotateTetrodata(tetrodata, direction){
-    // TODO: rotate tetrodata matrix in clockwise / couter-clockwise directions
+    const tetrowidth = tetrodata.shape[0].length;
+    const tetroheight = tetrodata.shape.length;
+    const n = Math.max(tetrowidth, tetroheight);
+    
+    // init square matrix with original shape data and zeros on overflowing positions
+    const orig_matrix = [];
+    for( var r = 0; r < n; r++ ){
+      orig_matrix[r] = [];
+      for( var c = 0; c < n; c++ )
+        orig_matrix[r][c] = (r < tetroheight && c < tetrowidth) ? tetrodata.shape[r][c] : 0;
+    }
+    
+    // init square matrix with rotated shape data
+    var rot_matrix = [];
+    for( var r = 0; r < n; r++ ){
+      rot_matrix[r] = [];
+      for( var c = 0; c < n; c++ )
+        rot_matrix[r][c] = direction > 0 ? orig_matrix[n - c - 1][r] : orig_matrix[c][n - r - 1];
+    }
+    
+    // clean rotated matrix from empty rows and columns
+    for( var r = n - 1; r >= 0; r-- ){
+      var is_row_empty = true;
+      for( var c = 0; c < n; c++ )
+        if( rot_matrix[r][c] == 1 ){ is_row_empty = false; break; }
+      if(is_row_empty) rot_matrix.splice(r, 1);
+    }
+    
+    for( var c = n - 1; c >= 0; c-- ){
+      var is_col_empty = true;
+      for( var r = 0; r < rot_matrix.length; r++ )
+        if( rot_matrix[r][c] == 1 ){ is_col_empty = false; break; }
+      if(is_col_empty) for( var r = 0; r < rot_matrix.length; r++ ) rot_matrix[r].splice(c, 1);
+    }
+    
+    tetrodata.shape = rot_matrix;
   }
   
   function _initFulfillmentMap(){
@@ -122,6 +159,15 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     
     _last_move_time = game.time.now;
+  }
+  
+  this.rotateCage = function(direction){
+    if(game.time.now < _last_rotation_time + GameConfig.rotation_delay) return;
+    
+    _rotateTetrodata(_active_tetrodata, direction);
+    game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    
+    _last_rotation_time = game.time.now;
   }
   
   _initFulfillmentMap();

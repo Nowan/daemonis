@@ -62,13 +62,12 @@ var game_state = function() {
       }
       
       if (this.key_up.isDown){
-        console.log("up");
+        game_controller.rotateCage(1);
       } 
       
       if (this.key_down.isDown){
         apply_acceleration = true;
       } 
-      
       
       game_controller.dropCage(apply_acceleration);
     },
