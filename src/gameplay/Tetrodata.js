@@ -2,6 +2,7 @@ function Tetrodata(template){
   var tetrodata = JSON.parse(JSON.stringify(template)); // deep clone of template from "data/tetrominoes.json"
   
   tetrodata.rotation = 0; // additional value describing shape matrix rotation
+  tetrodata.segments_n = 0; // number of tetromino segments; calculated on bottom
   
   tetrodata.getWidth = function(){
     return tetrodata.shape[0].length;
@@ -64,6 +65,11 @@ function Tetrodata(template){
     tetrodata.rotation += Math.sign(direction);
     tetrodata.shape = rot_matrix;
   }
+  
+  // calculate segments number
+  for( var r = 0; r < tetrodata.getHeight(); r++ )
+    for( var c = 0; c < tetrodata.getWidth(); c++ )
+      tetrodata.segments_n += tetrodata.shape[r][c];
   
   return tetrodata;
 };

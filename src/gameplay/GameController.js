@@ -86,7 +86,11 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       _active_position.row += 1;
       game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
     }
-    else{
+    else{ // if tetromino has fallen
+      // update score indicator
+      GameGlobals.score += _active_tetrodata.segments_n * GameConfig.drop_value;
+      score_indicator.setValue(GameGlobals.score);
+    
       // set flags of _fulfillment_map from active tetromino shape
       for( var r = 0; r < _active_tetrodata.getHeight(); r++ )
         for( var c = 0; c < _active_tetrodata.getWidth(); c++ )
