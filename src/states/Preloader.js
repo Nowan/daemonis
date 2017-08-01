@@ -10,6 +10,9 @@ var load_state = function() {
       this.game.load.spritesheet('flamesheet', 'assets/spritesheets/flames.png', 16, 24);
       this.game.load.image('logo','assets/textures/logo.png');
       
+      this.game.load.audio('hover_snd', 'assets/sounds/btn_hover.wav');
+      this.game.load.audio('press_snd', 'assets/sounds/btn_press.wav');
+      
       // load data files
       this.game.load.json('tetrominoes', 'data/tetrominoes.json');
       

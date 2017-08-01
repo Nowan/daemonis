@@ -10,6 +10,10 @@ function Button( game, label_text, actionCallback, callback_context ){
   const label = game.add.text(button.width * 0.5, button.height * 0.5 + 2, label_text, label_style);
   label.anchor.set(0.5);
   
+  const hover_sound = game.add.audio('hover_snd', 0.3);
+  const press_sound = game.add.audio('press_snd');
+  button.setSounds(hover_sound, null, press_sound);
+  
   this.add(button);
   this.add(label);
 }
