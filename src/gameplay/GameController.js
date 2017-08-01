@@ -55,6 +55,12 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     return true;
   }
+  
+  function _updateSpeedIndicator(time_step){
+    const speed = GameConfig.regular_drop_time / time_step;
+    if(speed == speed_indicator.getValue()) return; // prevent update if value is still the same
+    speed_indicator.setValue(speed.toFixed(1));
+  }
 
   function _updateTetroqueue(){
     _tetroqueue[0] = _tetroqueue[1];
@@ -96,6 +102,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   
   this.dropCage = function( apply_acceleration ){
     const time_step = apply_acceleration ? GameConfig.accelerated_drop_time : GameConfig.regular_drop_time;
+    _updateSpeedIndicator(time_step);
+    
     if(game.time.now < _last_drop_time + time_step) return;
     
     const is_falling = _canMoveTo(_active_tetrodata, _active_position.row + 1, _active_position.col);
