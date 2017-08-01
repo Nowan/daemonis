@@ -1,0 +1,29 @@
+{
+  "name": "daemonis",
+  "version": "1.0.0",
+  "description": "Basic backend for Daemonis game",
+  "engines": {
+    "node": "6.9.5"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnipromv/daemonis.git"
+  },
+  "keywords": [
+    "tetris",
+    "puzzle",
+    "brick",
+    "casual",
+    "game"
+  ],
+  "author": "Mykyta Dniprovskyi",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/dnipromv/daemonis/wiki",
+  "dependencies": {
+    "express": "4.14.1"
+  }
+}
