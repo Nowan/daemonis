@@ -41,11 +41,20 @@ GameArea.prototype.constructor = GameArea;
 GameArea.prototype.updateActiveTetromino = function(game, position, tetrodata){
   // initialize / reinitialize tetromino object only if neccessary 
   if(!this.active_tetromino || !tetrodata.equals(this.active_tetromino.data)){
+    // init chain
+    if(this.chain) this.chain.destroy();
+    this.chain = game.add.tileSprite( 0, 0, 8, 0, "basesheet", "game/chain");
+    this.chain.anchor.x = 0.5;
+    this.add(this.chain)
+    
+    // init tetromino itself
     if(this.active_tetromino) this.active_tetromino.destroy();
     this.active_tetromino = new Tetromino(game, tetrodata);
     this.add(this.active_tetromino);
   }
   
+  this.chain.height = position.row * GameConfig.tile_size;
+  this.chain.x = (position.col + this.active_tetromino.getWidth() * 0.5) * GameConfig.tile_size;
   this.active_tetromino.x = position.col * GameConfig.tile_size;
   this.active_tetromino.y = position.row * GameConfig.tile_size;
 }
