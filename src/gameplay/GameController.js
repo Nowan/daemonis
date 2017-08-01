@@ -35,12 +35,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     for( var r = 0; r < GameConfig.grid.height; r++ ){
       _fulfillment_map[r] = [];
       for( var c = 0; c < GameConfig.grid.width; c++ )
-        _fulfillment_map[r][c] = r==18 || r == 17 || r == 16;
+        _fulfillment_map[r][c] = false;
     }
-    _fulfillment_map[19][0] = true;
-    _fulfillment_map[15][5] = true;
-    _fulfillment_map[15][4] = true;
-    _fulfillment_map[14][5] = true;
   }
   
   function _canMoveTo(tetrodata, target_row, target_col){
@@ -141,6 +137,14 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     
     if(complete_row_ids.length <= 0) return;
+    
+    // update score & indicator
+    let score = GameConfig.grid.width * GameConfig.fill_value; // regular reward for single line
+    score *= complete_row_ids.length; // multiply by complete lines number
+    score += score * (complete_row_ids.length - 1) * GameConfig.line_bonus; // apply bonus for multi-completion
+    console.log(score);
+    GameGlobals.score += score;
+    score_indicator.setValue(GameGlobals.score);
     
     // update _fulfillment_map
     for( var i = complete_row_ids.length - 1; i >= 0; i-- ){ // loop through complete rows
