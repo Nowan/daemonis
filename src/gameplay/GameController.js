@@ -197,16 +197,15 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   this.tryToFinish = function(){
     if(game.time.now < _next_drop_time) return false;
     
-    var is_game_finished = false;
-    for( var c = 0; c < GameConfig.grid.width; c++ ){
-      if(_fulfillment_map[0][c]){
-        is_game_finished = true;
-        break;
-      }
-    }
+    // game is finished when new tetromino cannot be placed in starting position
+    var is_game_finished = !_canMoveTo(_active_tetrodata, 0, 0);
     
     if(is_game_finished){
+      // finish game
+      const score = GameGlobals.score;
+      GameGlobals.score = 0;
       
+      game.state.start("Finish", true, false, score);
     }
     
     return is_game_finished;

@@ -16,6 +16,7 @@
     
     <script src="src/interface/Button.js"></script>
     <script src="src/states/Menu.js"></script>
+    <script src="src/states/Finish.js"></script>
     
     <script src="src/helper/ClippedArea.js"></script>
     <script src="src/interface/GameContainer.js"></script>
@@ -35,6 +36,7 @@
         game.state.add('Boot', boot_state);
         game.state.add('Preloader', load_state);
         game.state.add('Menu', menu_state);
+        game.state.add('Finish', finish_state);
         game.state.add('Game', game_state);
         
         game.state.start('Boot');
