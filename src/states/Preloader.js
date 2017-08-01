@@ -7,6 +7,7 @@ var load_state = function() {
       this.game.load.atlasJSONArray( 'basesheet', 'assets/spritesheets/basesheet.png',
                                      'assets/spritesheets/basesheet.json' );
       this.game.load.spritesheet('buttonsheet', 'assets/spritesheets/buttonsheet.png', 304, 49);
+      this.game.load.spritesheet('flamesheet', 'assets/spritesheets/flames.png', 16, 24);
       this.game.load.image('logo','assets/textures/logo.png');
       
       // load data files

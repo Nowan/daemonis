@@ -3,7 +3,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   // public methods
   this.startGame = function(){};
   this.dropCage = function(apply_acceleration){};
-  this.emptyRows = function(){};
+  this.clearRows = function(){};
   this.moveCage = function(direction){}; // 1 - right, -1 - left; 
   this.rotateCage = function(direction){}; // 1 - clockwise, -1 - counter-clockwise
   this.tryToFinish = function(){ return false; };
@@ -123,7 +123,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
           if(_active_tetrodata.shape[r][c] == 1)
             _fulfillment_map[_active_position.row + r][_active_position.col + c] = true;
       
-      game_area.updateStaticObjects(game, _fulfillment_map);
+      game_area.addStaticObjects(game, _active_position, _active_tetrodata);
       _updateTetroqueue();
       _spawnTetromino(_tetroqueue[0]);
     }
@@ -132,7 +132,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     _last_drop_time = game.time.now;
   }
   
-  this.emptyRows = function(){
+  this.clearRows = function(){
     if(game.time.now != _last_drop_time) return;
     
     // get complete rows indexes
@@ -150,7 +150,6 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     let score = GameConfig.grid.width * GameConfig.fill_value; // regular reward for single line
     score *= complete_row_ids.length; // multiply by complete lines number
     score += score * (complete_row_ids.length - 1) * GameConfig.line_bonus; // apply bonus for multi-completion
-    console.log(score);
     GameGlobals.score += score;
     score_indicator.setValue(GameGlobals.score);
     
@@ -162,7 +161,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false; // empty first row
     }
     
-    game_area.updateStaticObjects(game, _fulfillment_map);
+    // run view animation
+    game_area.clearRows(game, complete_row_ids, _fulfillment_map);
   }
   
   this.moveCage = function(direction){
