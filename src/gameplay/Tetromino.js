@@ -24,8 +24,14 @@ function Tetromino(game, tetrodata){
     for( var c = 0; c < this.getWidth(); c++ ){
       if( this.data.shape[r][c] == 1 ){
         var cage = new Cage(game);
-        cage.x = c * GameConfig.tile_size;
-        cage.y = r * GameConfig.tile_size;
+        
+        // offset to place cage precisely in tile center
+        const offset_x = (GameConfig.tile_size - cage.width) * 0.5;
+        const offset_y = (GameConfig.tile_size - cage.height) * 0.5;
+        
+        cage.x = c * GameConfig.tile_size + offset_x;
+        cage.y = r * GameConfig.tile_size + offset_y;
+        
         this.add(cage);
       }
     }

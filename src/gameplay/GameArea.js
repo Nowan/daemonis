@@ -67,8 +67,14 @@ GameArea.prototype.updateStaticObjects = function(game, fulfillment_map){
       if(!fulfillment_map[r][c]) continue;
       
       var cage = new Cage(game);
-      cage.x = c * GameConfig.tile_size;
-      cage.y = r * GameConfig.tile_size;
+      
+      // offset to place cage precisely in tile center
+      const offset_x = (GameConfig.tile_size - cage.width) * 0.5;
+      const offset_y = (GameConfig.tile_size - cage.height) * 0.5;
+      
+      cage.x = c * GameConfig.tile_size + offset_x;
+      cage.y = r * GameConfig.tile_size + offset_y;
+      
       this.objects_group.add(cage);
     }
   }
