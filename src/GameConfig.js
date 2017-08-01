@@ -13,7 +13,7 @@ var GameConfig = {
   
   // gameplay parameters
   regular_drop_time: 1000, // time that tetromino stays on a single grid row
-  accelerated_drop_time: 150, // time that tetromino stays on a single grid row with "down" key pressed
+  accelerated_drop_time: 50, // time that tetromino stays on a single grid row with "down" key pressed
   move_delay: 200, // delay for tetromino column change
   rotation_delay: 200,
   

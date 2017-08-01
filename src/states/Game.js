@@ -73,6 +73,7 @@ var game_state = function() {
       } 
       
       game_controller.dropCage(apply_acceleration);
+      game_controller.emptyRows();
     },
 
     render() {

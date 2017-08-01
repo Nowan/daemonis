@@ -3,6 +3,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   // public methods
   this.startGame = function(){};
   this.dropCage = function(apply_acceleration){};
+  this.emptyRows = function(){};
   this.moveCage = function(direction){}; // 1 - right, -1 - left; 
   this.rotateCage = function(direction){}; // 1 - clockwise, -1 - counter-clockwise
   this.tryToFinish = function(){ return false; };
@@ -18,6 +19,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   let _fulfillment_map = []; // boolean matrix of a size of game grid. Provides info about tetrominoes that have   
                              // fallen already. If element at [row, col] is true - slot is full, false - empty. 
   let _last_drop_time = game.time.now; // helper variable to fire tetromino drop in proper time
+  let _next_drop_time = game.time.now; // helper variable to check game finish in proper time
   let _last_move_time = game.time.now; // helper variable to move tetromino with proper delay
   let _last_rotation_time = game.time.now; // helper variable to rotate tetromino with proper delay
   
@@ -33,8 +35,12 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     for( var r = 0; r < GameConfig.grid.height; r++ ){
       _fulfillment_map[r] = [];
       for( var c = 0; c < GameConfig.grid.width; c++ )
-        _fulfillment_map[r][c] = false;
+        _fulfillment_map[r][c] = r==18 || r == 17 || r == 16;
     }
+    _fulfillment_map[19][0] = true;
+    _fulfillment_map[15][5] = true;
+    _fulfillment_map[15][4] = true;
+    _fulfillment_map[14][5] = true;
   }
   
   function _canMoveTo(tetrodata, target_row, target_col){
@@ -68,6 +74,22 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
   }
   
+  function _getClosestRowCompletions(row, complete_ids){
+    // returns closest completed rows for provided one; complete_ids - array of completed rows indexes
+    var top_row = 0;
+    var bot_row = complete_ids[complete_ids.length - 1];
+    
+    for( var i = 0; i < complete_ids.length; i++ ){
+      if(row / complete_ids[i] > 1 ){ 
+        top_row = complete_ids[i]; 
+        bot_row = i - 1 >= 0 ? complete_ids[i - 1] : GameConfig.grid.height - 1;
+        break; 
+      }
+    }
+    
+    return { top: top_row, bottom: bot_row };
+  }
+  
   // public methods initialization
   this.startGame = function(){
     _tetroqueue = [ _getRandomTetrodata(), _getRandomTetrodata() ];
@@ -77,7 +99,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.dropCage = function( apply_acceleration ){
-    let time_step = apply_acceleration ? GameConfig.accelerated_drop_time : GameConfig.regular_drop_time;
+    const time_step = apply_acceleration ? GameConfig.accelerated_drop_time : GameConfig.regular_drop_time;
     if(game.time.now < _last_drop_time + time_step) return;
     
     const is_falling = _canMoveTo(_active_tetrodata, _active_position.row + 1, _active_position.col);
@@ -102,7 +124,33 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       _spawnTetromino(_tetroqueue[0]);
     }
     
+    _next_drop_time = game.time.now + time_step;
     _last_drop_time = game.time.now;
+  }
+  
+  this.emptyRows = function(){
+    if(game.time.now != _last_drop_time) return;
+    
+    // get complete rows indexes
+    let complete_row_ids = [];
+    for( var r = GameConfig.grid.height - 1; r >= 0; r-- ){
+      let is_row_complete = true;
+      for( var c = 0; c < GameConfig.grid.width; c++ )
+        if(!_fulfillment_map[r][c]){ is_row_complete = false; break; }
+      if(is_row_complete) complete_row_ids.push(r);
+    }
+    
+    if(complete_row_ids.length <= 0) return;
+    
+    // update _fulfillment_map
+    for( var i = complete_row_ids.length - 1; i >= 0; i-- ){ // loop through complete rows
+      const cr = complete_row_ids[i];
+      const tmp_stack = _fulfillment_map.slice(0, cr); // make copy of all rows above complete one
+      _fulfillment_map.splice.apply(_fulfillment_map, [1, cr].concat(tmp_stack)); // move rows on 1 position down
+      for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false; // empty first row
+    }
+    
+    game_area.updateStaticObjects(game, _fulfillment_map);
   }
   
   this.moveCage = function(direction){
@@ -143,7 +191,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.tryToFinish = function(){
-    if(game.time.now < _last_move_time + GameConfig.move_delay) return false;
+    if(game.time.now < _next_drop_time) return false;
     
     var is_game_finished = false;
     for( var c = 0; c < GameConfig.grid.width; c++ ){
