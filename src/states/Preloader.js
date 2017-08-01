@@ -11,6 +11,9 @@ var load_state = function() {
       
       // load data files
       this.game.load.json('tetrominoes', 'data/tetrominoes.json');
+      
+      // force Phaser to preload custom font by creating temporary text object
+      var font_fix = this.game.add.text(0, 0, "fix", {font:"1px endorregular"}); font_fix.destroy();
     },
     
     create() {
