@@ -22,6 +22,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   let _next_drop_time = game.time.now; // helper variable to check game finish in proper time
   let _last_move_time = game.time.now; // helper variable to move tetromino with proper delay
   let _last_rotation_time = game.time.now; // helper variable to rotate tetromino with proper delay
+  let _chain_sound_time = game.time.now;
   
   // private methods
   function _getRandomTetrodata(){
@@ -128,6 +129,16 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       _spawnTetromino(_tetroqueue[0]);
     }
     
+    // play chain sound with max 250 ms frequency and slight rate & volume change
+    if(game.time.now > _chain_sound_time){
+      const rand_track = game.rnd.integerInRange(0, 10000) < 5000 ? 1 : 2;
+      var chain_sound = game.add.audio("chain_"+ rand_track +"_snd");
+      chain_sound.volume = game.rnd.realInRange(0.4, 1);
+      chain_sound.play();
+      chain_sound._sound.playbackRate.value = game.rnd.realInRange(0.9,1.2);
+      _chain_sound_time += Math.max(time_step, 400);
+    }
+    // reset counters
     _next_drop_time = game.time.now + time_step;
     _last_drop_time = game.time.now;
   }
