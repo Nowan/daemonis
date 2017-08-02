@@ -172,6 +172,11 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false; // empty first row
     }
     
+    // play flame sound
+    var flame_sound = game.add.audio("flame_snd", 0.85);
+    flame_sound.play();
+    flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / GameConfig.row_burning_time;
+    
     // run view animation
     game_area.clearRows(game, complete_row_ids, _fulfillment_map);
   }

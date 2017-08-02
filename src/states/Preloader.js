@@ -14,6 +14,7 @@ var load_state = function() {
       this.game.load.audio('press_snd', 'assets/sounds/btn_press.wav');
       this.game.load.audio('chain_1_snd', 'assets/sounds/chain_1.wav');
       this.game.load.audio('chain_2_snd', 'assets/sounds/chain_2.wav');
+      this.game.load.audio('flame_snd', 'assets/sounds/flame.wav');
       
       // load data files
       this.game.load.json('tetrominoes', 'data/tetrominoes.json');
