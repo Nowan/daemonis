@@ -19,6 +19,8 @@ var load_state = function() {
       this.game.load.audio('scream_2_snd', 'assets/sounds/scream_2.wav');
       this.game.load.audio('scream_3_snd', 'assets/sounds/scream_3.wav');
       
+      this.game.load.audio('maintheme', 'assets/music/artofescapism__infiltration_of_toy_dungeon.mp3');
+      
       // load data files
       this.game.load.json('tetrominoes', 'data/tetrominoes.json');
       

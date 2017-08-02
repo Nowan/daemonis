@@ -133,7 +133,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     if(game.time.now > _chain_sound_time){
       const rand_track = game.rnd.integerInRange(0, 10000) < 5000 ? 1 : 2;
       var chain_sound = game.add.audio("chain_"+ rand_track +"_snd");
-      chain_sound.volume = game.rnd.realInRange(0.4, 1);
+      chain_sound.volume = game.rnd.realInRange(0.9, 1);
       chain_sound.play();
       chain_sound._sound.playbackRate.value = game.rnd.realInRange(0.9,1.2);
       _chain_sound_time += Math.max(time_step, 400);
@@ -173,7 +173,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     
     // play flame sound with appropriate rate 
-    var flame_sound = game.add.audio("flame_snd", 0.85);
+    var flame_sound = game.add.audio("flame_snd");
     flame_sound.play();
     flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / GameConfig.row_burning_time;
     
@@ -183,7 +183,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       const rand_int = game.rnd.integerInRange(0, 9000);
       const track_id = rand_int < 3000 ? 1 : rand_int < 6000 ? 2 : 3;
       var scream_sound = game.add.audio("scream_"+ track_id +"_snd");
-      scream_sound.volume = game.rnd.realInRange(0.25, 0.35);
+      scream_sound.volume = game.rnd.realInRange(0.35, 0.5);
       
       // play sound with slight delay to prevent all prisoners screaming all at once
       game.time.events.add(game.rnd.integerInRange(0, 500), function(){
