@@ -169,7 +169,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       const cr = complete_row_ids[i];
       const tmp_stack = _fulfillment_map.slice(0, cr); // make copy of all rows above complete one
       _fulfillment_map.splice.apply(_fulfillment_map, [1, cr].concat(tmp_stack)); // move rows on 1 position down
-      for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false; // empty first row
+      _fulfillment_map[0] = []; // make topmost row empty
+      for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false;
     }
     
     // play flame sound with appropriate rate 
