@@ -172,10 +172,25 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false; // empty first row
     }
     
-    // play flame sound
+    // play flame sound with appropriate rate 
     var flame_sound = game.add.audio("flame_snd", 0.85);
     flame_sound.play();
     flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / GameConfig.row_burning_time;
+    
+    // add some screams! 
+    const screams_n = game.rnd.integerInRange(complete_row_ids.length * 3, complete_row_ids.length * 5);
+    for( var i = 0; i < screams_n; i++ ){
+      const rand_int = game.rnd.integerInRange(0, 9000);
+      const track_id = rand_int < 3000 ? 1 : rand_int < 6000 ? 2 : 3;
+      var scream_sound = game.add.audio("scream_"+ track_id +"_snd");
+      scream_sound.volume = game.rnd.realInRange(0.25, 0.35);
+      
+      // play sound with slight delay to prevent all prisoners screaming all at once
+      game.time.events.add(game.rnd.integerInRange(0, 500), function(){
+        scream_sound.play();
+        scream_sound._sound.playbackRate.value = game.rnd.realInRange(0.9,1.2);
+      }, this);
+    }
     
     // run view animation
     game_area.clearRows(game, complete_row_ids, _fulfillment_map);
