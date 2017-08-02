@@ -33,7 +33,7 @@ var menu_state = function() {
   }
   
   onCreditsPressed = function(){
-    //this.game.state.start('Credits');
+    this.game.state.start('Credits');
   }
   
   return state;
