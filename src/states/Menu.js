@@ -1,7 +1,9 @@
 var menu_state = function() {
 
-  let onPlayPressed = function(){};
-  let onCreditsPressed = function(){};
+  var music;
+
+  var onPlayPressed = function(){};
+  var onCreditsPressed = function(){};
 
   state = {
     create() {
@@ -17,9 +19,11 @@ var menu_state = function() {
       credits_btn.x = play_btn.x;
       credits_btn.y = play_btn.y + play_btn.height + 60;
       
-      var music = this.game.add.audio('maintheme', 0.4);
-      music.loop = true;
-      music.play();
+      if(!music){
+        music = this.game.add.audio('maintheme', 0.4);
+        music.loop = true;
+        music.play();
+      }
       
     }
   };
