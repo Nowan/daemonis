@@ -1,4 +1,4 @@
-var menu_state = function() {
+var menuState = (function() {
 
   var music;
 
@@ -6,7 +6,7 @@ var menu_state = function() {
   var onCreditsPressed = function(){};
 
   state = {
-    create() {
+    create: function () {
       var logo = this.game.add.sprite(this.game.width * 0.5, 100, "logo");
       logo.scale.set(1.3);
       logo.anchor.x = 0.5;
@@ -37,4 +37,4 @@ var menu_state = function() {
   }
   
   return state;
-}();
+}());

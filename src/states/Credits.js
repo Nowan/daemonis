@@ -1,11 +1,7 @@
-var credits_state = function() {
+var creditsState = (function () {
 
   return {
-    init(){
-      
-    },
-    
-    create(){
+    create: function () {
       this.title_group = this.game.add.group();
     
       var label_style = { font: "32px endorregular", 
@@ -53,7 +49,7 @@ var credits_state = function() {
       this.game.input.mouse.capture = true;
     },
     
-    update(){
+    update: function () {
       if(this.title_group.y > -this.title_group.height){
         this.title_group.y -= 2;
         
@@ -64,4 +60,4 @@ var credits_state = function() {
         this.game.state.start("Menu");
     }
   };
-}();
+}());

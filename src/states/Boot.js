@@ -1,16 +1,12 @@
-var boot_state = function() {
+var bootState = (function () {
   
   function resizeHandler(scale, parentBounds) {
-    const fit_scale = parentBounds.height / this.game.height;
-    scale.setUserScale(fit_scale, fit_scale, 0, 0);
+    const fitScale = parentBounds.height / this.game.height;
+    scale.setUserScale(fitScale, fitScale, 0, 0);
   }
   
   return {
-    preload() {
-      
-    },
-
-    create() {
+    create: function () {
       this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
       this.game.scale.setResizeCallback(resizeHandler, this);
       
@@ -25,4 +21,4 @@ var boot_state = function() {
     }
   };
   
-}();
+}());

@@ -1,8 +1,8 @@
-var load_state = function() {
+var loadState = (function() {
   
   return {
   
-    preload() {
+    preload: function () {
       // load game assets
       this.game.load.atlasJSONArray( 'basesheet', 'assets/spritesheets/basesheet.png',
                                      'assets/spritesheets/basesheet.json' );
@@ -28,10 +28,10 @@ var load_state = function() {
       var font_fix = this.game.add.text(0, 0, "fix", {font:"1px endorregular"}); font_fix.destroy();
     },
     
-    create() {
+    create: function () {
       this.game.state.start('Menu');
     }
     
   };
   
-}();
+}());

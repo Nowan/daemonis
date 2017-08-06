@@ -1,15 +1,15 @@
-var finish_state = function() {
+var finishState = (function () {
   
   function goToMainScene(){
     this.game.state.start("Menu");
   }
 
   return {
-    init(score) {
+    init: function (score) {
       this.score = score
     },
     
-    create() {
+    create: function () {
       // init label for displaying final score
       var label_style = { font: "72px endorregular", 
                         fill: "#86322e", 
@@ -23,4 +23,4 @@ var finish_state = function() {
       this.game.time.events.add(Phaser.Timer.SECOND * 3, goToMainScene, this);
     }
   };
-}();
+}());

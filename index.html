@@ -36,12 +36,12 @@
       function initGame() {
         var game = new Phaser.Game( gameConfig.canvas_width, gameConfig.canvas_height, 
                                     Phaser.CANVAS, 'phaser-canvas', null, true );
-        game.state.add('Boot', boot_state);
-        game.state.add('Preloader', load_state);
-        game.state.add('Menu', menu_state);
-        game.state.add('Credits', credits_state);
-        game.state.add('Finish', finish_state);
-        game.state.add('Game', game_state);
+        game.state.add('Boot', bootState);
+        game.state.add('Preloader', loadState);
+        game.state.add('Menu', menuState);
+        game.state.add('Credits', creditsState);
+        game.state.add('Finish', finishState);
+        game.state.add('Game', gameState);
         
         game.state.start('Boot');
       }

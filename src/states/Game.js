@@ -1,10 +1,10 @@
-var game_state = function() {
+var gameState = (function () {
 
   var game_controller;
 
   return {
   
-    create() {
+    create: function () {
       const previews_margin_left = 40;
       const previews_margin_top = 80;
       const indicators_width = 380;
@@ -49,7 +49,7 @@ var game_state = function() {
       game_controller.startGame();
     },
 
-    update() {
+    update: function () {
       var is_game_finished = game_controller.tryToFinish();
       if(is_game_finished) return;
       
@@ -74,11 +74,7 @@ var game_state = function() {
       
       game_controller.dropCage(apply_acceleration);
       game_controller.clearRows();
-    },
-
-    render() {
-      
     }
-  
+    
   };
-}();
+}());
