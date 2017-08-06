@@ -57,22 +57,22 @@ var gameState = (function () {
       
       // handle keys
       if (this.keyLeft.isDown) {
-        gameController.moveCage(-1);
+        gameController.moveTetromino(-1);
       }
     
       if (this.keyRight.isDown) {
-        gameController.moveCage(1);
+        gameController.moveTetromino(1);
       }
       
       if (this.keyUp.isDown) {
-        gameController.rotateCage(1);
+        gameController.rotateTetromino(1);
       }
       
       if (this.keyDown.isDown) {
         applyAcceleration = true;
       }
       
-      gameController.dropCage(applyAcceleration);
+      gameController.dropTetromino(applyAcceleration);
       gameController.clearRows();
     }
     
