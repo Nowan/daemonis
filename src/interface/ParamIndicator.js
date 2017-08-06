@@ -1,23 +1,28 @@
-function ParamIndicator(game, width, label_key, value, postfix){
-	Phaser.Group.call(this, game);
+/*
+
+  Text indicator for displaying score and speed values.
+
+*/
+
+function ParamIndicator(game, width, labelKey, value, postfix) {
+  Phaser.Group.call(this, game);
   
-  var label = game.add.sprite(0, 0, "basesheet", label_key);
+  var label = game.add.sprite(0, 0, "basesheet", labelKey);
   label.anchor.y = 0.5;
   label.y = label.height * 0.5;
   
-  const indicator_style = { font: "72px endorregular", 
-                            fill: "#69231f", 
-                            boundsAlignV: "middle",
-                            align: "left" };
-  this.indicator = game.add.text(width * 0.3, label.y - 6, value, indicator_style);
+  var indicatorStyle = {font: "72px endorregular", fill: "#69231f",
+                          boundsAlignV: "middle", align: "left" };
+  
+  this.indicator = game.add.text(width * 0.3, label.y - 6, value, indicatorStyle);
   this.indicator.anchor.y = 0.5;
   
-  if(postfix){
-    indicator_style.fontSize = 45;
-    this.indicator_postfix = game.add.text( this.indicator.x + this.indicator.width, 
-                                            this.indicator.y + 8, postfix, indicator_style);
-    this.indicator_postfix.anchor.y = 0.5;
-    this.add(this.indicator_postfix);
+  if (postfix) {
+    indicatorStyle.fontSize = 45;
+    this.indicatorPostfix = game.add.text(this.indicator.x + this.indicator.width,
+                                          this.indicator.y + 8, postfix, indicatorStyle);
+    this.indicatorPostfix.anchor.y = 0.5;
+    this.add(this.indicatorPostfix);
   }
   
   this.add(label);
@@ -25,11 +30,10 @@ function ParamIndicator(game, width, label_key, value, postfix){
 };
 
 ParamIndicator.prototype = Object.create(Phaser.Group.prototype);
-ParamIndicator.prototype.constructor = ParamIndicator;
 
-ParamIndicator.prototype.setValue = function(value) {
+ParamIndicator.prototype.setValue = function (value) {
   this.indicator.text = value;
-  if(this.indicator_postfix) this.indicator_postfix.x = this.indicator.x + this.indicator.width;
-}
+  if (this.indicatorPostfix) { this.indicatorPostfix.x = this.indicator.x + this.indicator.width; }
+};
 
-ParamIndicator.prototype.getValue = function(){ return this.indicator.text; }
+ParamIndicator.prototype.getValue = function () { return this.indicator.text; }

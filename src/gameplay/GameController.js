@@ -66,8 +66,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   function _updateTetroqueue(){
     _tetroqueue[0] = _tetroqueue[1];
     _tetroqueue[1] = _getRandomTetrodata();
-    current_preview.setPreview(game, _tetroqueue[0]);
-    next_preview.setPreview(game, _tetroqueue[1]);
+    current_preview.updatePreview(game, _tetroqueue[0]);
+    next_preview.updatePreview(game, _tetroqueue[1]);
   }
   
   function _spawnTetromino(tetrodata){
@@ -96,8 +96,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   // public methods initialization
   this.startGame = function(){
     _tetroqueue = [ _getRandomTetrodata(), _getRandomTetrodata() ];
-    current_preview.setPreview(game, _tetroqueue[0]);
-    next_preview.setPreview(game, _tetroqueue[1]);
+    current_preview.updatePreview(game, _tetroqueue[0]);
+    next_preview.updatePreview(game, _tetroqueue[1]);
     _spawnTetromino(_tetroqueue[0]);
   }
   
