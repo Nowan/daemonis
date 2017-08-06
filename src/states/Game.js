@@ -1,79 +1,79 @@
 var gameState = (function () {
 
-  var game_controller;
+  var gameController;
 
   return {
   
     create: function () {
-      const previews_margin_left = 40;
-      const previews_margin_top = 80;
-      const indicators_width = 380;
-      const content_center = { x: this.game.width * 0.5, y: this.game.height * 0.5 };
+      var previewMarginLeft = 40;
+      var previewMarginTop = 80;
+      var indicatorWidth = 380;
+      var contentCenter = { x: this.game.width * 0.5, y: this.game.height * 0.5 };
       
       // initialize interface
-      var game_container = new GameContainer(this.game);
-      game_container.x = content_center.x - game_container.width * 0.5;
+      var gameContainer = new GameContainer(this.game);
+      gameContainer.x = contentCenter.x - gameContainer.width * 0.5;
       
-      var current_preview = new TetroPreview(this.game, "interface/lbl_current");
-      current_preview.x = game_container.x + game_container.width + previews_margin_left;
-      current_preview.y = previews_margin_top;
+      var currentPreview = new TetroPreview(this.game, "interface/lbl_current");
+      currentPreview.x = gameContainer.x + gameContainer.width + previewMarginLeft;
+      currentPreview.y = previewMarginTop;
       
-      var next_preview = new TetroPreview(this.game, "interface/lbl_next");
-      next_preview.x = game_container.x + game_container.width + previews_margin_left;
-      next_preview.y = current_preview.y + current_preview.height + previews_margin_top;
+      var nextPreview = new TetroPreview(this.game, "interface/lbl_next");
+      nextPreview.x = gameContainer.x + gameContainer.width + previewMarginLeft;
+      nextPreview.y = currentPreview.y + currentPreview.height + previewMarginTop;
       
-      var score_indicator = new ParamIndicator(this.game, indicators_width, "interface/lbl_score", 0);
-      score_indicator.x = game_container.x - indicators_width;
-      score_indicator.y = content_center.y - 110;
+      var scoreIndicator = new ParamIndicator(this.game, indicatorWidth, "interface/lbl_score", 0);
+      scoreIndicator.x = gameContainer.x - indicatorWidth;
+      scoreIndicator.y = contentCenter.y - 110;
       
-      var speed_indicator = new ParamIndicator(this.game, indicators_width, "interface/lbl_speed", "1.0", "x");
-      speed_indicator.x = game_container.x - indicators_width;
-      speed_indicator.y = content_center.y + 30;
+      var speedIndicator = new ParamIndicator(this.game, indicatorWidth, "interface/lbl_speed", "1.0", "x");
+      speedIndicator.x = gameContainer.x - indicatorWidth;
+      speedIndicator.y = contentCenter.y + 30;
       
-      var game_area = new GameArea(this.game);
-      game_container.setContent(game_area);
+      var gameArea = new GameArea(this.game);
+      gameContainer.setContent(gameArea);
       
       // register keys for future handling
-      this.key_left = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-      this.key_right = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-      this.key_up = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
-      this.key_down = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+      this.keyLeft = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+      this.keyRight = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+      this.keyUp = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+      this.keyDown = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
       
       // stop selected keys propagation to the browser
-      this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, 
+      this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT,
                                                Phaser.Keyboard.UP, Phaser.Keyboard.DOWN ]);
       
       // initialize game controller and start a new game
-      game_controller = new GameController( this.game, current_preview, next_preview,
-                                                score_indicator, speed_indicator, game_area );
-      game_controller.startGame();
+      gameController = new GameController(this.game, currentPreview, nextPreview,
+                                          scoreIndicator, speedIndicator, gameArea);
+      gameController.startGame();
     },
 
     update: function () {
-      var is_game_finished = game_controller.tryToFinish();
-      if(is_game_finished) return;
+      var isGameFinished = gameController.tryToFinish();
+      if (isGameFinished) { return; }
       
-      var apply_acceleration = false;
+      var applyAcceleration = false;
       
       // handle keys
-      if (this.key_left.isDown){
-        game_controller.moveCage(-1);
-      } 
+      if (this.keyLeft.isDown) {
+        gameController.moveCage(-1);
+      }
     
-      if (this.key_right.isDown){
-        game_controller.moveCage(1);
+      if (this.keyRight.isDown) {
+        gameController.moveCage(1);
       }
       
-      if (this.key_up.isDown){
-        game_controller.rotateCage(1);
-      } 
+      if (this.keyUp.isDown) {
+        gameController.rotateCage(1);
+      }
       
-      if (this.key_down.isDown){
-        apply_acceleration = true;
-      } 
+      if (this.keyDown.isDown) {
+        applyAcceleration = true;
+      }
       
-      game_controller.dropCage(apply_acceleration);
-      game_controller.clearRows();
+      gameController.dropCage(applyAcceleration);
+      gameController.clearRows();
     }
     
   };
