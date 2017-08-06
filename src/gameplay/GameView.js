@@ -17,7 +17,6 @@ function GameView(game) {
 };
 
 GameView.prototype = Object.create(Phaser.Group.prototype);
-GameView.prototype.varructor = GameView;
 
 GameView.prototype.updateTetromino = function(game, position, tetrodata){
   // update display objects only if data has changed
