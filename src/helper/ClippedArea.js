@@ -4,20 +4,19 @@
   
 */
 
-function ClippedArea(game, width, height){
-	Phaser.Group.call(this, game);
+function ClippedArea(game, width, height) {
+  Phaser.Group.call(this, game);
   
   // draw rectangle that would serve as a mask for clipped area 
-  var mask_graphics = game.add.graphics(0, 0);
-  mask_graphics.lineStyle(0);
-  mask_graphics.beginFill(0x000000, 1);
-  mask_graphics.drawRect(0, 0, width, height);
-  mask_graphics.endFill();
+  var maskGraphics = game.add.graphics(0, 0);
+  maskGraphics.lineStyle(0);
+  maskGraphics.beginFill(0x000000, 1);
+  maskGraphics.drawRect(0, 0, width, height);
+  maskGraphics.endFill();
 
   // apply mask to the group
-  this.mask = mask_graphics;
-  this.add(mask_graphics);
-};
+  this.mask = maskGraphics;
+  this.add(maskGraphics);
+}
 
 ClippedArea.prototype = Object.create(Phaser.Group.prototype);
-ClippedArea.prototype.constructor = ClippedArea;

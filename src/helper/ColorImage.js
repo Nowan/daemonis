@@ -9,7 +9,7 @@
   
 */
 
-function ColorImage(game, source, color="#ffffff"){
+function ColorImage(game, source, color="#ffffff") {
   var color = Phaser.Color.hexToColor(color);
   
   var bitmap = game.add.bitmapData(source.width, source.height)
@@ -17,8 +17,7 @@ function ColorImage(game, source, color="#ffffff"){
                .blendDestinationAtop()
                .draw(source, 0, 0, source.width, source.height);
   
-	Phaser.Image.call(this, game, 0, 0, bitmap);
-};
+  Phaser.Image.call(this, game, 0, 0, bitmap);
+}
 
 ColorImage.prototype = Object.create(Phaser.Image.prototype);
-ColorImage.prototype.constructor = ColorImage;
