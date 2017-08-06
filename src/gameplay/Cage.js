@@ -1,3 +1,9 @@
+/*
+
+  Single cage with animated prisoner.
+
+*/
+
 function Cage(game) {
   Phaser.Group.call(this, game);
   
