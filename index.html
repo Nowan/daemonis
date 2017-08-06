@@ -34,7 +34,7 @@
     
     <script>
       function initGame() {
-        var game = new Phaser.Game( gameConfig.canvas_width, gameConfig.canvas_height, 
+        var game = new Phaser.Game( gameConfig.canvasWidth, gameConfig.canvasHeight, 
                                     Phaser.CANVAS, 'phaser-canvas', null, true );
         game.state.add('Boot', bootState);
         game.state.add('Preloader', loadState);

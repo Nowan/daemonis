@@ -68,7 +68,7 @@ GameView.prototype.clearRows = function (game, rowIDs, fillMap) {
     }
   }
   
-  game.time.events.add(gameConfig.row_burning_time, function () {
+  game.time.events.add(gameConfig.rowBurnTime, function () {
     this.resetView(game, fillMap);
   }, this);
 };

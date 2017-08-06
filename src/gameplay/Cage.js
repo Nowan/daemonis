@@ -30,7 +30,7 @@ Cage.prototype.burn = function(game){
   
   // add flames (in waves)
   const waves_n = 4;
-  const wave_delay = gameConfig.row_burning_time / waves_n;
+  const wave_delay = gameConfig.rowBurnTime / waves_n;
   const offset_x = (gameConfig.tileSize - this.width) * 0.5;
   const offset_y = (gameConfig.tileSize - this.height) * 0.5;
 

@@ -58,7 +58,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   function _updateSpeedIndicator(time_step){
-    const speed = gameConfig.regular_drop_time / time_step;
+    const speed = gameConfig.regDropTime / time_step;
     if(speed == speed_indicator.getValue()) return; // prevent update if value is still the same
     speed_indicator.setValue(speed.toFixed(1));
   }
@@ -102,7 +102,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.dropCage = function( apply_acceleration ){
-    const time_step = apply_acceleration ? gameConfig.accelerated_drop_time : gameConfig.regular_drop_time;
+    const time_step = apply_acceleration ? gameConfig.aclDropTime : gameConfig.regDropTime;
     _updateSpeedIndicator(time_step);
     
     if(game.time.now < _last_drop_time + time_step) return;
@@ -115,7 +115,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     else{ // if tetromino has fallen
       // update score indicator
-      gameGlobals.score += _active_tetrodata.segments_n * gameConfig.drop_value;
+      gameGlobals.score += _active_tetrodata.segments_n * gameConfig.dropValue;
       score_indicator.setValue(gameGlobals.score);
     
       // set flags of _fulfillment_map from active tetromino shape
@@ -158,9 +158,9 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     if(complete_row_ids.length <= 0) return;
     
     // update score & indicator
-    let score = gameConfig.gridWidth * gameConfig.fill_value; // regular reward for single line
+    let score = gameConfig.gridWidth * gameConfig.fillValue; // regular reward for single line
     score *= complete_row_ids.length; // multiply by complete lines number
-    score += score * (complete_row_ids.length - 1) * gameConfig.line_bonus; // apply bonus for multi-completion
+    score += score * (complete_row_ids.length - 1) * gameConfig.bonusMultiplier; // apply bonus for multi-completion
     gameGlobals.score += score;
     score_indicator.setValue(gameGlobals.score);
     
@@ -176,7 +176,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     // play flame sound with appropriate rate 
     var flame_sound = game.add.audio("flame_snd");
     flame_sound.play();
-    flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / gameConfig.row_burning_time;
+    flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / gameConfig.rowBurnTime;
     
     // add some screams! 
     const screams_n = game.rnd.integerInRange(complete_row_ids.length * 3, complete_row_ids.length * 5);
@@ -198,7 +198,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.moveCage = function(direction){
-    if(game.time.now < _last_move_time + gameConfig.move_delay) return;
+    if(game.time.now < _last_move_time + gameConfig.moveDelay) return;
     
     direction = Math.sign(direction);
     const next_col = _active_position.col + direction;
@@ -213,7 +213,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.rotateCage = function(direction){
-    if(game.time.now < _last_rotation_time + gameConfig.rotation_delay) return;
+    if(game.time.now < _last_rotation_time + gameConfig.rotDelay) return;
     
     var tmp_tetrodata = new Tetrodata(_active_tetrodata);
     tmp_tetrodata.rotate(direction);
