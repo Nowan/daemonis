@@ -9,11 +9,16 @@ function Tetromino(game, tetrodata) {
   
   this.data = new Tetrodata(tetrodata);
   
-  this.getWidth = tetrodata.getWidth;
-  this.getHeight = tetrodata.getHeight;
+  Object.defineProperty(this, 'width', { enumerable: true, get: function(){
+    return this.data.width;
+  }});
   
-  for (var r = 0; r < this.getHeight(); r++) {
-    for (var c = 0; c < this.getWidth(); c++) {
+  Object.defineProperty(this, 'height', { enumerable: true, get: function(){
+    return this.data.height;
+  }});
+  
+  for (var r = 0; r < this.height; r++) {
+    for (var c = 0; c < this.width; c++) {
       if (this.data.shape[r][c] == 1) {
         var cage = new Cage(game);
         

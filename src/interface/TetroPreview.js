@@ -43,8 +43,8 @@ TetroPreview.prototype.setPreview = function(game, tetrodata) {
   if(this.tetromino) this.tetromino.destroy();
   
   this.tetromino = new Tetromino(game, tetrodata);
-  this.tetromino.x = (this.preview_area.width - this.tetromino.getWidth() * gameConfig.tileSize) * 0.5;
-  this.tetromino.y = (this.preview_area.height - this.tetromino.getHeight() * gameConfig.tileSize) * 0.5;
+  this.tetromino.x = (this.preview_area.width - this.tetromino.width * gameConfig.tileSize) * 0.5;
+  this.tetromino.y = (this.preview_area.height - this.tetromino.height * gameConfig.tileSize) * 0.5;
   
   this.preview_area.add(this.tetromino);
 }

@@ -20,7 +20,7 @@ GameView.prototype = Object.create(Phaser.Group.prototype);
 
 GameView.prototype.updateTetromino = function(game, position, tetrodata){
   // update display objects only if data has changed
-  if (!this.tetromino || tetrodata !== this.tetromino.data) {
+  if (!this.tetromino || !tetrodata.equals(this.tetromino.data)) {
     if (this.chain) { this.chain.destroy(); }
     this.chain = game.add.tileSprite( 0, 0, 8, 0, "basesheet", "game/chain");
     this.chain.anchor.x = 0.5;
@@ -32,14 +32,14 @@ GameView.prototype.updateTetromino = function(game, position, tetrodata){
   }
   
   this.chain.height = position.row * gameConfig.tileSize;
-  this.chain.x = (position.col + this.tetromino.getWidth() * 0.5) * gameConfig.tileSize;
+  this.chain.x = (position.col + this.tetromino.width * 0.5) * gameConfig.tileSize;
   this.tetromino.x = position.col * gameConfig.tileSize;
   this.tetromino.y = position.row * gameConfig.tileSize;
 };
 
 GameView.prototype.addStaticTetro = function (game, position, tetrodata) {
-  for (var r = 0; r < tetrodata.getHeight(); r++) {
-    for (var c = 0; c < tetrodata.getWidth(); c++) {
+  for (var r = 0; r < tetrodata.height; r++) {
+    for (var c = 0; c < tetrodata.width; c++) {
       if (tetrodata.shape[r][c] === 1) {
         var cage = new Cage(game);
         

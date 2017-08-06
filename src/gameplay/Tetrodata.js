@@ -1,75 +1,102 @@
-function Tetrodata(template){
-  var tetrodata = JSON.parse(JSON.stringify(template)); // deep clone of template from "data/tetrominoes.json"
+/*
+
+  Extension of an object from 'data/tetrominoes.json'. 
+
   
-  tetrodata.rotation = 0; // additional value describing shape matrix rotation
-  tetrodata.segments_n = 0; // number of tetromino segments; calculated on bottom
+  Additional properties:
   
-  tetrodata.getWidth = function(){
-    return tetrodata.shape[0].length;
-  }
+  width, height - boundary size of tetrodata shape
   
-  tetrodata.getHeight = function(){
-    return tetrodata.shape.length;
-  }
+  blocksNumber - number of full blocks in tetrodata shape
   
-  tetrodata.equals = function(other){
-    // compare rotation
-    if(tetrodata.rotation != other.rotation) return false;
+  
+  Additional methods:
+  
+  rotate(direction) - applies rotation to shape matrix; direction: 1 - clockwise, -1 - counter-clockwise
+  
+  equals(tetrodata) - compares tetrodata references, periods and shapes to tell whether they are the same
+  
+*/
+
+function Tetrodata(template) {
+  var tetrodata = JSON.parse(JSON.stringify(template));
+  
+  tetrodata.period = 0; // period of shape matrix rotation
+  
+  Object.defineProperty(tetrodata, 'width', { enumerable: true, get: function () {
+    return this.shape[0].length;
+  }});
+  
+  Object.defineProperty(tetrodata, 'height', { enumerable: true, get: function () {
+    return this.shape.length;
+  }});
+  
+  Object.defineProperty(tetrodata, 'blocksNumber', { enumerable: true, get: function () {
+    var blocksN = 0;
+    for (var r = 0; r < this.height; r++) {
+      for (var c = 0; c < this.width; c++) {
+        if (this.shape[r][c] === 1) blocksN++;
+      }
+    }
+    return blocksN;
+  }});
+  
+  tetrodata.equals = function (other) {
+    if (tetrodata === other) { return true; }
     
-    // compare boundaries
-    if(tetrodata.getWidth() != other.getWidth() || tetrodata.getHeight() != other.getHeight) return false;
+    if (tetrodata.period !== other.period) { return false; }
     
-    // compare shapes
-    for( var r = 0; r < tetrodata.getHeight(); r++ )
-      for( var c = 0; c < tetrodata.getWidth(); c++ )
-        if(tetrodata.shape[r][c] != other.shape[r][c])
-          return false;
+    if(tetrodata.width !== other.width || tetrodata.height !== other.height) { return false; }
+    
+    for (var r = 0; r < tetrodata.height; r++) {
+      for (var c = 0; c < tetrodata.width; c++) {
+        if(tetrodata.shape[r][c] != other.shape[r][c]) { return false; }
+      }
+    }
     
     return true;
-  }
+  };
   
-  tetrodata.rotate = function(direction){
-    const n = Math.max(tetrodata.getWidth(), tetrodata.getHeight());
+  tetrodata.rotate = function (direction) {
+    const n = Math.max(tetrodata.width, tetrodata.height);
     
-    // init square matrix with original shape data and zeros on overflowing positions
-    const orig_matrix = [];
+    // copy original shape into square matrix
+    const origMatrix = [];
     for( var r = 0; r < n; r++ ){
-      orig_matrix[r] = [];
+      origMatrix[r] = [];
       for( var c = 0; c < n; c++ )
-        orig_matrix[r][c] = (r < tetrodata.getHeight() && c < tetrodata.getWidth()) ? tetrodata.shape[r][c] : 0;
+        origMatrix[r][c] = (r < tetrodata.height && c < tetrodata.width) ? tetrodata.shape[r][c] : 0;
     }
     
-    // init square matrix with rotated shape data
-    var rot_matrix = [];
+    // rotate shape into rotMatrix
+    var rotMatrix = [];
     for( var r = 0; r < n; r++ ){
-      rot_matrix[r] = [];
+      rotMatrix[r] = [];
       for( var c = 0; c < n; c++ )
-        rot_matrix[r][c] = direction > 0 ? orig_matrix[n - c - 1][r] : orig_matrix[c][n - r - 1];
+        rotMatrix[r][c] = direction > 0 ? origMatrix[n - c - 1][r] : origMatrix[c][n - r - 1];
     }
     
-    // clean rotated matrix from empty rows and columns
-    for( var r = n - 1; r >= 0; r-- ){
-      var is_row_empty = true;
-      for( var c = 0; c < n; c++ )
-        if( rot_matrix[r][c] == 1 ){ is_row_empty = false; break; }
-      if(is_row_empty) rot_matrix.splice(r, 1);
+    // get rid of empty rows / columns
+    for (var r = n - 1; r >= 0; r--) {
+      var isRowEmpty = true;
+      for (var c = 0; c < n; c++) {
+        if (rotMatrix[r][c] == 1) { isRowEmpty = false; break; }
+      }
+      if (isRowEmpty) { rotMatrix.splice(r, 1); }
     }
     
-    for( var c = n - 1; c >= 0; c-- ){
-      var is_col_empty = true;
-      for( var r = 0; r < rot_matrix.length; r++ )
-        if( rot_matrix[r][c] == 1 ){ is_col_empty = false; break; }
-      if(is_col_empty) for( var r = 0; r < rot_matrix.length; r++ ) rot_matrix[r].splice(c, 1);
+    for (var c = n - 1; c >= 0; c--) {
+      var isColEmpty = true;
+      for (var r = 0; r < rotMatrix.length; r++){
+        if (rotMatrix[r][c] == 1) { isColEmpty = false; break; }
+      }
+      if (isColEmpty) { for( var r = 0; r < rotMatrix.length; r++ ) rotMatrix[r].splice(c, 1); }
     }
     
-    tetrodata.rotation += Math.sign(direction);
-    tetrodata.shape = rot_matrix;
+    // apply changes to original tetrodata
+    tetrodata.period += Math.sign(direction);
+    tetrodata.shape = rotMatrix;
   }
-  
-  // calculate segments number
-  for( var r = 0; r < tetrodata.getHeight(); r++ )
-    for( var c = 0; c < tetrodata.getWidth(); c++ )
-      tetrodata.segments_n += tetrodata.shape[r][c];
   
   return tetrodata;
 };

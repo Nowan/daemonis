@@ -42,13 +42,13 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   
   function _canMoveTo(tetrodata, target_row, target_col){
     // I check: if target position is inside game grid bounds
-    if( target_row < 0 || target_row + tetrodata.getHeight() > gameConfig.gridHeight ||
-        target_col < 0 || target_col + tetrodata.getWidth() > gameConfig.gridWidth )
+    if( target_row < 0 || target_row + tetrodata.height > gameConfig.gridHeight ||
+        target_col < 0 || target_col + tetrodata.width > gameConfig.gridWidth )
       return false;
     
     // II check: check that tetromino does not collide with static objects on game grid
-    for( var r = 0; r < tetrodata.getHeight(); r++ ){
-      for( var c = 0; c < tetrodata.getWidth(); c++ ){
+    for( var r = 0; r < tetrodata.height; r++ ){
+      for( var c = 0; c < tetrodata.width; c++ ){
         if(tetrodata.shape[r][c] == 1 && _fulfillment_map[target_row + r][target_col + c])
           return false;
       }
@@ -115,12 +115,12 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     else{ // if tetromino has fallen
       // update score indicator
-      gameGlobals.score += _active_tetrodata.segments_n * gameConfig.dropValue;
+      gameGlobals.score += _active_tetrodata.blocksNumber * gameConfig.dropValue;
       score_indicator.setValue(gameGlobals.score);
     
       // set flags of _fulfillment_map from active tetromino shape
-      for( var r = 0; r < _active_tetrodata.getHeight(); r++ )
-        for( var c = 0; c < _active_tetrodata.getWidth(); c++ )
+      for( var r = 0; r < _active_tetrodata.height; r++ )
+        for( var c = 0; c < _active_tetrodata.width; c++ )
           if(_active_tetrodata.shape[r][c] == 1)
             _fulfillment_map[_active_position.row + r][_active_position.col + c] = true;
       
@@ -220,8 +220,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     // automatically fix tetromino position if it is partly outside grid bounds
     var tmp_position = { 
-      row: Math.min(_active_position.row, gameConfig.gridHeight - tmp_tetrodata.getHeight()),
-      col: Math.min(_active_position.col, gameConfig.gridWidth - tmp_tetrodata.getWidth())
+      row: Math.min(_active_position.row, gameConfig.gridHeight - tmp_tetrodata.height),
+      col: Math.min(_active_position.col, gameConfig.gridWidth - tmp_tetrodata.width)
     };
 
     // apply changes if rotated tetromino does not overlap static objects
