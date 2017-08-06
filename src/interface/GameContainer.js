@@ -1,6 +1,8 @@
 /*
 
-  Framed container for game world. Prevents rendering content outside its boundaries.
+  Framed container for game world. 
+  Renders background, grid, game view and borders in the enlisted order.
+  Prevents rendering content outside container boundaries.
 
 */
 
@@ -37,7 +39,29 @@ function GameContainer(game) {
     return borders;
   }());
   
+  var grid = (function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(1, 0x69231f, 0.85);
+    graphics.beginFill(0x000000, 1);
+    
+    for( var i = 1; i < gameConfig.gridWidth; i++ ){
+      var line_x = i * gameConfig.tileSize;
+      graphics.moveTo(line_x, 0);
+      graphics.lineTo(line_x, containerHeight);
+    }
+    
+    for( var i = 1; i < gameConfig.gridHeight; i++ ){
+      var line_y = i * gameConfig.tileSize;
+      graphics.moveTo(0, line_y);
+      graphics.lineTo(containerWidth, line_y);
+    }
+    
+    graphics.endFill();
+    return graphics;
+  }());
+  
   this.add(background);
+  this.add(grid);
   this.add(this.clippedArea);
   this.add(borders);
 }

@@ -1,4 +1,4 @@
-function GameController(game, current_preview, next_preview, score_indicator, speed_indicator, game_area){
+function GameController(game, current_preview, next_preview, score_indicator, speed_indicator, gameView){
 
   // public methods
   this.startGame = function(){};
@@ -74,7 +74,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     _active_tetrodata = tetrodata;
     _active_position.row = 0;
     _active_position.col = 0;
-    game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+    gameView.updateTetromino(game, _active_position, _active_tetrodata);
   }
   
   function _getClosestRowCompletions(row, complete_ids){
@@ -111,7 +111,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     if(is_falling){
       _active_position.row += 1;
-      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+      gameView.updateTetromino(game, _active_position, _active_tetrodata);
     }
     else{ // if tetromino has fallen
       // update score indicator
@@ -124,7 +124,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
           if(_active_tetrodata.shape[r][c] == 1)
             _fulfillment_map[_active_position.row + r][_active_position.col + c] = true;
       
-      game_area.addStaticObjects(game, _active_position, _active_tetrodata);
+      gameView.addStaticTetro(game, _active_position, _active_tetrodata);
       _updateTetroqueue();
       _spawnTetromino(_tetroqueue[0]);
     }
@@ -194,7 +194,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     
     // run view animation
-    game_area.clearRows(game, complete_row_ids, _fulfillment_map);
+    gameView.clearRows(game, complete_row_ids, _fulfillment_map);
   }
   
   this.moveCage = function(direction){
@@ -206,7 +206,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     if(is_direction_free){
       _active_position.col = next_col;
-      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+      gameView.updateTetromino(game, _active_position, _active_tetrodata);
     }
     
     _last_move_time = game.time.now;
@@ -229,7 +229,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       _active_tetrodata = tmp_tetrodata;
       _active_position = tmp_position;
     
-      game_area.updateActiveTetromino(game, _active_position, _active_tetrodata);
+      gameView.updateTetromino(game, _active_position, _active_tetrodata);
       _last_rotation_time = game.time.now;
     }
   }

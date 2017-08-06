@@ -30,8 +30,8 @@ var gameState = (function () {
       speedIndicator.x = gameContainer.x - indicatorWidth;
       speedIndicator.y = contentCenter.y + 30;
       
-      var gameArea = new GameArea(this.game);
-      gameContainer.setContent(gameArea);
+      var gameView = new GameView(this.game);
+      gameContainer.setContent(gameView);
       
       // register keys for future handling
       this.keyLeft = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -45,7 +45,7 @@ var gameState = (function () {
       
       // initialize game controller and start a new game
       gameController = new GameController(this.game, currentPreview, nextPreview,
-                                          scoreIndicator, speedIndicator, gameArea);
+                                          scoreIndicator, speedIndicator, gameView);
       gameController.startGame();
     },
 
