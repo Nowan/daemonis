@@ -1,7 +1,7 @@
 var bootState = (function () {
   
   function resizeHandler(scale, parentBounds) {
-    const fitScale = parentBounds.height / this.game.height;
+    var fitScale = parentBounds.height / this.game.height;
     scale.setUserScale(fitScale, fitScale, 0, 0);
   }
   
