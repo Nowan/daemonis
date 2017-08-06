@@ -1,61 +1,50 @@
 /*
 
-  Container for game world, displayed in the center of page. 
+  Framed container for game world. Prevents rendering content outside its boundaries.
 
 */
 
-function GameContainer( game ){
+function GameContainer(game) {
   Phaser.Group.call(this, game);
   
-  const container_width = gameConfig.gridWidth * gameConfig.tileSize;
-  const container_height = gameConfig.gridHeight * gameConfig.tileSize;
+  var containerWidth = gameConfig.gridWidth * gameConfig.tileSize;
+  var containerHeight = gameConfig.gridHeight * gameConfig.tileSize;
   
-  function initBorders() {
-    const border_width = 20;
-    const light_height = 520;
-    const light_y = (container_height - light_height) * 0.5;
-    
-    var g_borders = game.add.group();
-    
-    var left_border = game.add.tileSprite( -border_width, 0, border_width, container_height, 
-                                           "basesheet", "interface/border_segment");
-    var left_light = game.add.tileSprite( -3, light_y, 20, light_height, 
-                                          "basesheet", "interface/border_light");
-    
-    var right_border = game.add.tileSprite( container_width + border_width, 0, border_width, container_height, 
-                                           "basesheet", "interface/border_segment");
-    right_border.scale.x *= -1;
-    
-    var right_light = game.add.tileSprite( container_width + 3, light_y, 20, light_height, 
-                                           "basesheet", "interface/border_light");
-    right_light.scale.x *= -1;
-    
-    g_borders.add(left_light);
-    g_borders.add(left_border);
-    
-    g_borders.add(right_light);
-    g_borders.add(right_border);
-    
-    return g_borders;
-  }
- 
-  function initBackground() {
-    return game.add.tileSprite( 0, 0, container_width, container_height, 
-                                "basesheet", "interface/game_bg");
-  }
+  var background = game.add.tileSprite(0, 0, containerWidth, containerHeight, "basesheet", "interface/game_bg");
   
-  var background = initBackground();
-  this.clipped_area = new ClippedArea(game, container_width, container_height);
-  var borders = initBorders();
+  this.clippedArea = new ClippedArea(game, containerWidth, containerHeight);
+  
+  var borders = (function () {
+    var borders = game.add.group();
+    
+    var leftBorder = game.add.tileSprite(-20, 0, 20, containerHeight, "basesheet", "interface/border_segment");
+    var leftLight = game.add.sprite(-3, game.height * 0.5, "basesheet", "interface/border_light");
+    leftLight.anchor.y = 0.5;
+    
+    var rightBorder = game.add.tileSprite(containerWidth + 20, 0, 20, containerHeight,
+                                          "basesheet", "interface/border_segment");
+    var rightLight = game.add.sprite(containerWidth + 3, game.height * 0.5, "basesheet", "interface/border_light");
+    rightLight.anchor.y = 0.5;
+    
+    rightBorder.scale.x *= -1;
+    rightLight.scale.x *= -1;
+    
+    borders.add(leftLight);
+    borders.add(leftBorder);
+    borders.add(rightLight);
+    borders.add(rightBorder);
+    
+    return borders;
+  }());
   
   this.add(background);
-  this.add(this.clipped_area);
+  this.add(this.clippedArea);
   this.add(borders);
 }
 
 GameContainer.prototype = Object.create(Phaser.Group.prototype);
-GameContainer.prototype.constructor = GameContainer;
+GameContainer.prototype.varructor = GameContainer;
 
-GameContainer.prototype.setContent = function(group_object) {
-  this.clipped_area.add(group_object);
-}
+GameContainer.prototype.setContent = function (phaserGroup) {
+  this.clippedArea.add(phaserGroup);
+};
