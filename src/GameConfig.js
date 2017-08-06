@@ -1,15 +1,13 @@
-var GameConfig = {
+var gameConfig = {
   
   // canvas parameters
   canvas_width: 1500,
   canvas_height: 1000,
   
   // grid parameters
-  grid: {
-    width: 10,
-    height: 20
-  },
-  tile_size: 50, // recalculated on Boot state
+  gridWidth: 10,
+  gridHeight: 20,
+  tileSize: 50, // recalculated on Boot state
   
   // gameplay parameters
   regular_drop_time: 1000, // time that tetromino stays on a single grid row

@@ -33,17 +33,17 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   
   function _initFulfillmentMap(){
     _fulfillment_map = [];
-    for( var r = 0; r < GameConfig.grid.height; r++ ){
+    for( var r = 0; r < gameConfig.gridHeight; r++ ){
       _fulfillment_map[r] = [];
-      for( var c = 0; c < GameConfig.grid.width; c++ )
+      for( var c = 0; c < gameConfig.gridWidth; c++ )
         _fulfillment_map[r][c] = false;
     }
   }
   
   function _canMoveTo(tetrodata, target_row, target_col){
     // I check: if target position is inside game grid bounds
-    if( target_row < 0 || target_row + tetrodata.getHeight() > GameConfig.grid.height ||
-        target_col < 0 || target_col + tetrodata.getWidth() > GameConfig.grid.width )
+    if( target_row < 0 || target_row + tetrodata.getHeight() > gameConfig.gridHeight ||
+        target_col < 0 || target_col + tetrodata.getWidth() > gameConfig.gridWidth )
       return false;
     
     // II check: check that tetromino does not collide with static objects on game grid
@@ -58,7 +58,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   function _updateSpeedIndicator(time_step){
-    const speed = GameConfig.regular_drop_time / time_step;
+    const speed = gameConfig.regular_drop_time / time_step;
     if(speed == speed_indicator.getValue()) return; // prevent update if value is still the same
     speed_indicator.setValue(speed.toFixed(1));
   }
@@ -85,7 +85,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     for( var i = 0; i < complete_ids.length; i++ ){
       if(row / complete_ids[i] > 1 ){ 
         top_row = complete_ids[i]; 
-        bot_row = i - 1 >= 0 ? complete_ids[i - 1] : GameConfig.grid.height - 1;
+        bot_row = i - 1 >= 0 ? complete_ids[i - 1] : gameConfig.gridHeight - 1;
         break; 
       }
     }
@@ -102,7 +102,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.dropCage = function( apply_acceleration ){
-    const time_step = apply_acceleration ? GameConfig.accelerated_drop_time : GameConfig.regular_drop_time;
+    const time_step = apply_acceleration ? gameConfig.accelerated_drop_time : gameConfig.regular_drop_time;
     _updateSpeedIndicator(time_step);
     
     if(game.time.now < _last_drop_time + time_step) return;
@@ -115,8 +115,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     }
     else{ // if tetromino has fallen
       // update score indicator
-      GameGlobals.score += _active_tetrodata.segments_n * GameConfig.drop_value;
-      score_indicator.setValue(GameGlobals.score);
+      gameGlobals.score += _active_tetrodata.segments_n * gameConfig.drop_value;
+      score_indicator.setValue(gameGlobals.score);
     
       // set flags of _fulfillment_map from active tetromino shape
       for( var r = 0; r < _active_tetrodata.getHeight(); r++ )
@@ -148,9 +148,9 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     // get complete rows indexes
     let complete_row_ids = [];
-    for( var r = GameConfig.grid.height - 1; r >= 0; r-- ){
+    for( var r = gameConfig.gridHeight - 1; r >= 0; r-- ){
       let is_row_complete = true;
-      for( var c = 0; c < GameConfig.grid.width; c++ )
+      for( var c = 0; c < gameConfig.gridWidth; c++ )
         if(!_fulfillment_map[r][c]){ is_row_complete = false; break; }
       if(is_row_complete) complete_row_ids.push(r);
     }
@@ -158,11 +158,11 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     if(complete_row_ids.length <= 0) return;
     
     // update score & indicator
-    let score = GameConfig.grid.width * GameConfig.fill_value; // regular reward for single line
+    let score = gameConfig.gridWidth * gameConfig.fill_value; // regular reward for single line
     score *= complete_row_ids.length; // multiply by complete lines number
-    score += score * (complete_row_ids.length - 1) * GameConfig.line_bonus; // apply bonus for multi-completion
-    GameGlobals.score += score;
-    score_indicator.setValue(GameGlobals.score);
+    score += score * (complete_row_ids.length - 1) * gameConfig.line_bonus; // apply bonus for multi-completion
+    gameGlobals.score += score;
+    score_indicator.setValue(gameGlobals.score);
     
     // update _fulfillment_map
     for( var i = complete_row_ids.length - 1; i >= 0; i-- ){ // loop through complete rows
@@ -170,13 +170,13 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
       const tmp_stack = _fulfillment_map.slice(0, cr); // make copy of all rows above complete one
       _fulfillment_map.splice.apply(_fulfillment_map, [1, cr].concat(tmp_stack)); // move rows on 1 position down
       _fulfillment_map[0] = []; // make topmost row empty
-      for( var c = 0; c < GameConfig.grid.width; c++ ) _fulfillment_map[0][c] = false;
+      for( var c = 0; c < gameConfig.gridWidth; c++ ) _fulfillment_map[0][c] = false;
     }
     
     // play flame sound with appropriate rate 
     var flame_sound = game.add.audio("flame_snd");
     flame_sound.play();
-    flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / GameConfig.row_burning_time;
+    flame_sound._sound.playbackRate.value = flame_sound.totalDuration * 1000 / gameConfig.row_burning_time;
     
     // add some screams! 
     const screams_n = game.rnd.integerInRange(complete_row_ids.length * 3, complete_row_ids.length * 5);
@@ -198,7 +198,7 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.moveCage = function(direction){
-    if(game.time.now < _last_move_time + GameConfig.move_delay) return;
+    if(game.time.now < _last_move_time + gameConfig.move_delay) return;
     
     direction = Math.sign(direction);
     const next_col = _active_position.col + direction;
@@ -213,15 +213,15 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
   }
   
   this.rotateCage = function(direction){
-    if(game.time.now < _last_rotation_time + GameConfig.rotation_delay) return;
+    if(game.time.now < _last_rotation_time + gameConfig.rotation_delay) return;
     
     var tmp_tetrodata = new Tetrodata(_active_tetrodata);
     tmp_tetrodata.rotate(direction);
     
     // automatically fix tetromino position if it is partly outside grid bounds
     var tmp_position = { 
-      row: Math.min(_active_position.row, GameConfig.grid.height - tmp_tetrodata.getHeight()),
-      col: Math.min(_active_position.col, GameConfig.grid.width - tmp_tetrodata.getWidth())
+      row: Math.min(_active_position.row, gameConfig.gridHeight - tmp_tetrodata.getHeight()),
+      col: Math.min(_active_position.col, gameConfig.gridWidth - tmp_tetrodata.getWidth())
     };
 
     // apply changes if rotated tetromino does not overlap static objects
@@ -242,8 +242,8 @@ function GameController(game, current_preview, next_preview, score_indicator, sp
     
     if(is_game_finished){
       // finish game
-      const score = GameGlobals.score;
-      GameGlobals.score = 0;
+      const score = gameGlobals.score;
+      gameGlobals.score = 0;
       
       game.state.start("Finish", true, false, score);
     }

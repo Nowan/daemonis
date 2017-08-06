@@ -30,16 +30,16 @@ Cage.prototype.burn = function(game){
   
   // add flames (in waves)
   const waves_n = 4;
-  const wave_delay = GameConfig.row_burning_time / waves_n;
-  const offset_x = (GameConfig.tile_size - this.width) * 0.5;
-  const offset_y = (GameConfig.tile_size - this.height) * 0.5;
+  const wave_delay = gameConfig.row_burning_time / waves_n;
+  const offset_x = (gameConfig.tileSize - this.width) * 0.5;
+  const offset_y = (gameConfig.tileSize - this.height) * 0.5;
 
   function createFlame(){
     var flame = game.add.sprite(0, 0, 'flamesheet');
     
     // randomize position inside crate bounds
-    flame.x = Math.floor(Math.random() * (GameConfig.tile_size - offset_x * 2 - flame.width)) + offset_x;
-    flame.y = Math.floor(Math.random() * (GameConfig.tile_size - offset_y * 2 - flame.height)) + offset_y;
+    flame.x = Math.floor(Math.random() * (gameConfig.tileSize - offset_x * 2 - flame.width)) + offset_x;
+    flame.y = Math.floor(Math.random() * (gameConfig.tileSize - offset_y * 2 - flame.height)) + offset_y;
     
     flame.animations.add('burn');
     flame.animations.play('burn', 20, true);

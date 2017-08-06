@@ -1,12 +1,12 @@
 function GameArea(game){
 	Phaser.Group.call(this, game);
   
-  const container_width = GameConfig.grid.width * GameConfig.tile_size;
-  const container_height = GameConfig.grid.height * GameConfig.tile_size;
+  const container_width = gameConfig.gridWidth * gameConfig.tileSize;
+  const container_height = gameConfig.gridHeight * gameConfig.tileSize;
   
   this.static_objects = []; // two-dimensional array for storing static objects; 
                             // element indexing sequence: static_objects[row][col]
-  for( var r = 0; r < GameConfig.grid.height; r++ ) this.static_objects[r] = [];
+  for( var r = 0; r < gameConfig.gridHeight; r++ ) this.static_objects[r] = [];
   
   function initGrid(){
     // draw grid on Phaser.Graphics object
@@ -15,15 +15,15 @@ function GameArea(game){
     graphics.beginFill(0x000000, 1);
     
     // vertical lines
-    for( var i = 1; i < GameConfig.grid.width; i++ ){
-      var line_x = i * GameConfig.tile_size;
+    for( var i = 1; i < gameConfig.gridWidth; i++ ){
+      var line_x = i * gameConfig.tileSize;
       graphics.moveTo(line_x, 0);
       graphics.lineTo(line_x, container_height);
     }
     
     // horizontal lines
-    for( var i = 1; i < GameConfig.grid.height; i++ ){
-      var line_y = i * GameConfig.tile_size;
+    for( var i = 1; i < gameConfig.gridHeight; i++ ){
+      var line_y = i * gameConfig.tileSize;
       graphics.moveTo(0, line_y);
       graphics.lineTo(container_width, line_y);
     }
@@ -57,10 +57,10 @@ GameArea.prototype.updateActiveTetromino = function(game, position, tetrodata){
     this.add(this.active_tetromino);
   }
   
-  this.chain.height = position.row * GameConfig.tile_size;
-  this.chain.x = (position.col + this.active_tetromino.getWidth() * 0.5) * GameConfig.tile_size;
-  this.active_tetromino.x = position.col * GameConfig.tile_size;
-  this.active_tetromino.y = position.row * GameConfig.tile_size;
+  this.chain.height = position.row * gameConfig.tileSize;
+  this.chain.x = (position.col + this.active_tetromino.getWidth() * 0.5) * gameConfig.tileSize;
+  this.active_tetromino.x = position.col * gameConfig.tileSize;
+  this.active_tetromino.y = position.row * gameConfig.tileSize;
 }
 
 GameArea.prototype.addStaticObjects = function(game, position, tetrodata){
@@ -70,11 +70,11 @@ GameArea.prototype.addStaticObjects = function(game, position, tetrodata){
         var cage = new Cage(game);
         
         // offset to place cage precisely in tile center
-        const offset_x = (GameConfig.tile_size - cage.width) * 0.5;
-        const offset_y = (GameConfig.tile_size - cage.height) * 0.5;
+        const offset_x = (gameConfig.tileSize - cage.width) * 0.5;
+        const offset_y = (gameConfig.tileSize - cage.height) * 0.5;
         
-        cage.x = (position.col + c) * GameConfig.tile_size + offset_x;
-        cage.y = (position.row + r) * GameConfig.tile_size + offset_y;
+        cage.x = (position.col + c) * gameConfig.tileSize + offset_x;
+        cage.y = (position.row + r) * gameConfig.tileSize + offset_y;
         
         this.static_objects[position.row + r][position.col + c] = cage;
         this.objects_group.add(cage);
@@ -86,7 +86,7 @@ GameArea.prototype.addStaticObjects = function(game, position, tetrodata){
 GameArea.prototype.clearRows = function(game, row_ids, fulfillment_map){
   for( var i = 0; i < row_ids.length; i++ ){
     const r = row_ids[i];
-    for( var c = GameConfig.grid.width - 1; c >= 0; c-- ){
+    for( var c = gameConfig.gridWidth - 1; c >= 0; c-- ){
       if(this.static_objects[r][c]){
         this.static_objects[r][c].burn(game);
         this.static_objects[r].splice(c, 1);
@@ -94,7 +94,7 @@ GameArea.prototype.clearRows = function(game, row_ids, fulfillment_map){
     }
   }
   
-  game.time.events.add(GameConfig.row_burning_time, function(){
+  game.time.events.add(gameConfig.row_burning_time, function(){
     this.resetView(game, fulfillment_map);
   }, this);
 }
@@ -102,19 +102,19 @@ GameArea.prototype.clearRows = function(game, row_ids, fulfillment_map){
 GameArea.prototype.resetView = function(game, fulfillment_map){
   this.objects_group.removeAll();
   
-  for( var r = 0; r < GameConfig.grid.height; r++ ){
+  for( var r = 0; r < gameConfig.gridHeight; r++ ){
     this.static_objects[r] = []; // remove all object references
     
-    for( var c = 0; c < GameConfig.grid.width; c++ ){
+    for( var c = 0; c < gameConfig.gridWidth; c++ ){
       if(fulfillment_map[r][c]){
         var cage = new Cage(game);
         
         // offset to place cage precisely in tile center
-        const offset_x = (GameConfig.tile_size - cage.width) * 0.5;
-        const offset_y = (GameConfig.tile_size - cage.height) * 0.5;
+        const offset_x = (gameConfig.tileSize - cage.width) * 0.5;
+        const offset_y = (gameConfig.tileSize - cage.height) * 0.5;
         
-        cage.x = c * GameConfig.tile_size + offset_x;
-        cage.y = r * GameConfig.tile_size + offset_y;
+        cage.x = c * gameConfig.tileSize + offset_x;
+        cage.y = r * gameConfig.tileSize + offset_y;
         
         this.objects_group.add(cage);
         this.static_objects[r][c] = cage;

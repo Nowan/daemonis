@@ -8,8 +8,8 @@
   
     <script src="lib/phaser.min.js"></script>
   
-    <script src="src/GameConfig.js"></script>
-    <script src="src/GameGlobals.js"></script>
+    <script src="src/gameConfig.js"></script>
+    <script src="src/gameGlobals.js"></script>
     
     <script src="src/states/Boot.js"></script>
     <script src="src/states/Preloader.js"></script>
@@ -34,7 +34,7 @@
     
     <script>
       function initGame() {
-        var game = new Phaser.Game( GameConfig.canvas_width, GameConfig.canvas_height, 
+        var game = new Phaser.Game( gameConfig.canvas_width, gameConfig.canvas_height, 
                                     Phaser.CANVAS, 'phaser-canvas', null, true );
         game.state.add('Boot', boot_state);
         game.state.add('Preloader', load_state);
